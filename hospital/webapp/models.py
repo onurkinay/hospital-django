@@ -41,14 +41,7 @@ class Doctor(models.Model):
     Experience = models.TextField()
     Languages = models.CharField(max_length=300)
 
-class Patient(models.Model):
-    ID = models.BigAutoField(primary_key=True)
-    User = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,blank=True, null=True)
-    DateOfBirth = models.DateField()
-    Gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
-    Blood_Group = models.CharField(max_length = 20,  choices = BLOOD_GROUPS, default = '1')
-    Address =models.TextField()
-    Phone = models.CharField(max_length=11)
+
 
 class Admin(models.Model):
     ID = models.BigAutoField(primary_key=True)
