@@ -1,22 +1,24 @@
 {% load static %}
 
 <!DOCTYPE html> 
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %} {%endblock%} | Blogapp</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %} {%endblock%} | Hospital Management</title>
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
-    <script type="text/javascript" src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
-    <script src="{% static 'js/jquery.modal.min.js' %}"></script>
-    <link rel="stylesheet" href="{% static 'css/jquery.modal.min.css' %}">
+        <script type="text/javascript" src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+        <script src="{% static 'js/jquery.modal.min.js' %}"></script>
+        <link rel="stylesheet" href="{% static 'css/jquery.modal.min.css' %}">
 
-</head>
+    </head>
 
 <body>
    
 
-<header id="header">
+<header id="header"><!--menu role based-->
     <img id="logo-header" src="{% static 'Images/apple-touch-icon.png' %}" alt="Hospital Logo">
     <h1 id="head">The Great Hospital</h1>
     <nav class="ana-menu">

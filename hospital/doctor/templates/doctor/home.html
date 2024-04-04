@@ -1,0 +1,159 @@
+{% extends "management_base.html" %}
+
+{% load static %}
+{% block title %} Doctors {% endblock %}
+{% block content %}
+
+
+<section id="doktor-yonetimi">
+    <div class="container">
+
+        <h2 style="display:inline">Doctor Management</h2>
+            <div class="addButton">
+                <a class="addButtonInside" href="/Doctors/Create">Add Doctor</a>
+            </div>
+            <div class="bosluk"></div>
+                    <ul class="responsive-table">
+                <li class="table-header">
+                    <div class="col col-1">Name</div>
+                    <div class="col col-2">Department Name</div>
+                        <div class="col col-3">Specializations</div>
+                    <div class="col col-4">Actions</div>
+                </li>
+                    <li class="table-row">
+                        <div class="col col-1 nameSurname" data-label="Job Id">Ahmet Kaşka</div>
+                        <div class="col col-2" data-label="Doctor Name">General Surgery</div>
+                            <div class="col col-3 ">good prescription writer</div>
+                        <div class="col col-4" data-label="Operation">
+<a href="/Doctors/Edit/1">Edit</a>                            | 
+                            <a class="getDetails" href="/Doctors/Details/1">Details</a>
+| <a class="delete" href="/Doctors/Delete/5ba5c341-25ca-4fa1-9aae-3598f04fee2e">Delete</a>                        </div>
+                    </li>
+                    <li class="table-row">
+                        <div class="col col-1 nameSurname" data-label="Job Id">Mustafa Deveci</div>
+                        <div class="col col-2" data-label="Doctor Name">Otorhinolaryngology</div>
+                            <div class="col col-3 ">looking good to eyes</div>
+                        <div class="col col-4" data-label="Operation">
+<a href="/Doctors/Edit/3">Edit</a>                            | 
+                            <a class="getDetails" href="/Doctors/Details/3">Details</a>
+| <a class="delete" href="/Doctors/Delete/19906884-193f-41c5-8839-833e0f5a10e9">Delete</a>                        </div>
+                    </li>
+            </ul>
+    </div>
+
+
+</section>
+
+
+
+<div id="ex1" class="modal" style="max-width:initial">
+    <section id="ozel-sayfa" style="padding:0;margin-bottom:0">
+        <div class="container" style="max-width:initial">
+            <div class="kisisel-bilgiler">
+                <h3>Personal Information</h3>
+                <ul>
+                    <li class="docNameSurname"><span>Name Surname:</span> </li>
+                    <li class="docDoB"><span>Date of Birth:</span> </li>
+                    <li class="docNumber"><span>Phone Number:</span> </li>
+                    <li class="docEmail"><span>E-Mail Address:</span></li>
+                    <li class="docGender"><span>Gender:</span></li>
+                </ul>
+            </div>
+            <div class="hesap-bilgileri">
+                <h3>-</h3>
+                <ul>
+                    <li class="docExperience"><span>Experience:</span></li>
+                    <li class="docSpecializations"><span>Specializations:</span> </li>
+                    <li class="docLangs"><span>Langs:</span></li>
+                    <li class="docDept"><span>Department:</span></li>
+                    <li class="docSalary"><span>Salary:</span></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+<script>
+     function gettoken() {
+        var token = '<input name="__RequestVerificationToken" type="hidden" value="k1oM1ya6UMF4QW87qYAn7wnja33GPpbP_Ll6LWzMeimj9yfuGogJl97LWnNoJyW_fXmj2NMyDThme-YfeHKdPgov-J9mZUhmJC5MwR0YZKaf2OPvM8UV12PaXoAbmsoM0rIn_Yt0eoZKaGAz24b3Bg2" />';
+        token = $(token).val();
+        return token;
+    }
+
+
+    $('.changeSalary').click(function (event) {//linke click eventi kazandırma
+        event.preventDefault();
+        let salaryDName = $(event.target).parent().siblings(".nameSurname").text();
+        let oldsalary = $(event.target).parent().siblings(".salary").text();
+
+        let salary = prompt("Please enter new salary for " + salaryDName,oldsalary );
+        if (salary != null && salary != "") {
+            if (isNaN(salary)) {
+                alert("Please enter a number");
+
+            } else if (salary < 0) {
+                alert("Salary must be greater than 0");
+            } else {
+                $.ajax({
+                    url: this.href,
+                    data: {
+                        __RequestVerificationToken: gettoken(),
+                        newSalary: salary
+                    },
+                    type: 'POST',
+                    success: function (result) {
+                        location.reload();
+                    }
+                });
+            }
+        }
+
+    });
+
+    $('.delete').click(function (event) {//linke click eventi kazandırma
+        event.preventDefault();
+        if (confirm("Do you sure delete this doctor")) {
+            $.ajax({
+                url: this.href,
+                data: {
+                    __RequestVerificationToken: gettoken()
+                },
+                type: 'POST',
+                success: function (result) {
+                    location.reload();
+                }
+            });
+        }
+
+    });
+
+
+    $('.getDetails').click(function (event) {//linke click eventi kazandırma
+        event.preventDefault();
+        this.blur();
+        $.get(this.href, function (json) {
+            const doctor = JSON.parse(json)
+            $('li.docNameSurname').html('<span>Name Surname:</span> ' + doctor.Name + " " + doctor.Surname)
+            $('li.docDoB').html('<span>Date of Birth:</span> ' + (new Date(doctor.DOB)).toLocaleDateString())
+            $('li.docNumber').html('<span>Phone Number:</span> ' + doctor.Phone)
+            $('li.docEmail').html('<span>Email:</span> ' + doctor.Email)
+            $('li.docGender').html('<span>Gender:</span> ' + ((doctor.Gender) ? "Male" : "Female"))
+            $('li.docExperience').html('<span>Experience:</span> ' + doctor.Experience)
+            $('li.docSpecializations').html('<span>Specializations:</span> ' + doctor.Specializations)
+            $('li.docLangs').html('<span>Languages:</span> ' + doctor.Languages)
+            $('li.docSalary').html('<span>Salary:</span> ' + doctor.Salary)
+            $.get("/Departments/getDeptName/" + doctor.CurDeptartmentID, function (department) {
+
+                $('li.docDept').html('<span>Department:</span> ' + department)
+                $('#ex1').modal();
+            });
+        });
+    });
+
+
+</script>
+
+
+
+{%endblock%}

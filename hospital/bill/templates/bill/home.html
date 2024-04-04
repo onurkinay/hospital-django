@@ -1,0 +1,75 @@
+{% extends "management_base.html" %}
+
+{% load static %}
+{% block title %} Bill {% endblock %}
+{% block content %}
+
+
+<section id="doktor-yonetimi">
+    <div class="container">
+        <h2>Bills</h2>
+        <ul class="responsive-table">
+        <li class="table-header">
+            <div class="col col-1">Appointment Date</div>
+            <div class="col col-1">Name</div>
+            <div class="col col-1">Amount</div>
+            <div class="col col-1">Is Paid?</div>
+            <div class="col col-4">Actions</div>
+        </li>
+        <li class="table-row">
+            <div class="col col-1" data-label="Job Id">18.01.2024 17:14:00</div>
+            <div class="col col-1">Mehmet</div>
+            <div class="col col-1">100</div>
+            <div class="col col-2" data-label="Operation">
+                Paid
+
+            </div>
+            <div class="col col-3" data-label="Operation">
+
+<a href="/Bills/Edit/3">Edit</a> | <a class="deleteBill" href="/Bills/Delete/3">Delete</a>
+
+            </div>
+        </li>
+        <li class="table-row">
+            <div class="col col-1" data-label="Job Id">19.04.2024 13:34:00</div>
+            <div class="col col-1">Patient</div>
+            <div class="col col-1">100</div>
+            <div class="col col-2" data-label="Operation">
+                Not Paid
+
+            </div>
+            <div class="col col-3" data-label="Operation">
+
+<a href="/Bills/Edit/1002">Edit</a> | <a class="deleteBill" href="/Bills/Delete/1002">Delete</a>
+
+            </div>
+        </li>
+        </ul>
+
+    </div>
+</section>
+
+
+
+<script>
+
+         $('.deleteBill').click(function (event) {//linke click eventi kazandırma
+             event.preventDefault();
+             if (confirm("Do you sure delete this bill")) {
+                 $.ajax({
+                     url: this.href,
+                     data: {
+                         __RequestVerificationToken: gettoken()
+                     },
+                     type: 'POST',
+                     success: function (result) {
+                         location.reload();
+                     }
+                 });
+             }
+
+         });
+</script>
+
+
+{% endblock %}

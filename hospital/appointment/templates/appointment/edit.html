@@ -1,0 +1,67 @@
+{% extends "management_base.html" %}
+
+{% load static %}
+{% block title %} Edit Appointment {% endblock %}
+{% block content %}
+
+<section id="randevu-al-container">
+    <h2 class="container-header">Edit Appointment</h2>
+    <div class="randevu-al">
+<form action="https://localhost:44328/Appointments/Edit/1" method="post"><input name="__RequestVerificationToken" type="hidden" value="2NEyPSohtUFq31dnm91ASAJCYSWICSGgNw3mJJleL_yN5RxB4Fc67fYNIwVIP4rTiXNCgdtU50JPsXSB1JCjIGnPRQF4fkkqAsLOEOHVy8ElhwTa-5DkzLqvHkVEBB1Aszaqh2CPwzUBwks7ZR_AhQ2"><input data-val="true" data-val-number="The field Id must be a number." data-val-required="Id alanı gereklidir." id="Id" name="Id" type="hidden" value="1"><input data-val="true" data-val-number="The field Patient_ID must be a number." data-val-required="Patient_ID alanı gereklidir." id="Patient_ID" name="Patient_ID" type="hidden" value="1"><input data-val="true" data-val-number="The field Doctor_ID must be a number." data-val-required="Doctor_ID alanı gereklidir." id="Doctor_ID" name="Doctor_ID" type="hidden" value="1">                <div class="form-group">
+                    <!--DOKTORUN GÖRECEĞİ KISIM-->
+                    <label for="doktor-id">Patient:</label>
+                    <label for="Patient_One">Patient One</label>
+                    <span class="field-validation-valid text-danger" data-valmsg-for="Patient_ID" data-valmsg-replace="true"></span>
+                    <a href="https://localhost:44328/Patients/Details/1" class="getDetails">Get Details</a>
+                </div>
+            <div class="form-group">
+                <label for="randevu-tarihi">Randevu Tarihi</label>
+                <input class="form-control" data-val="true" data-val-date="The field Appointment Date must be a date." data-val-required="Appointment Date alanı gereklidir." id="AppointmentDate" min="2024-04-04T00:00" name="AppointmentDate" required="required" type="datetime-local" value="2024-01-26T13:49:00">
+                <span class="field-validation-valid text-danger" data-valmsg-for="AppointmentDate" data-valmsg-replace="true"></span>
+            </div>
+            <div class="form-group">
+                <label for="randevu-sebebi">Randevu Sebebi</label>
+<input class="form-control text-box single-line" data-val="true" data-val-required="Description is required" disabled="true" id="Description" name="Description" type="text" value="gene kontrol">                <span class="field-validation-valid text-danger" data-valmsg-for="Description" data-valmsg-replace="true"></span>
+            </div>
+            <div class="form-group">
+                <input id="btn" type="submit" value="Edit Appointment">
+            </div>
+</form>    </div>
+</section>
+
+
+<div id="ex1" class="modal">
+    <section id="ozel-sayfa" style="padding:0;margin-bottom:0">
+        <div class="container" style="max-width:initial"> 
+            <!-- role based olarak değişmeli-->
+                            <div class="kisisel-bilgiler" style="width:100%">
+                    <h3>Patient</h3>
+                    <ul>
+                        <li class="patientNameSurname"></li>
+                        <li class="patientBlood"></li>
+                    </ul>
+                </div>
+
+        </div>
+    </section>
+</div>
+
+    <script>
+        $('.getDetails').click(function (event) {//linke click eventi kazandırma
+            event.preventDefault();
+            this.blur();
+            $.get(this.href, function (html) {
+                
+                    const patient = JSON.parse(html)
+                    $('li.patientNameSurname').html('<span>Name Surname:</span> ' + patient.Name + " " + patient.Surname)
+                    $('li.patientBlood').html('<span>Blood Group:</span> ' + patient.Blood_Group)
+                    $('#ex1').modal();
+                });
+
+
+            });
+         
+
+    </script>
+
+{% endblock %}
