@@ -1,3 +1,9 @@
 from django.db import models
 
-# Create your models here.
+class Department(models.Model):
+    ID = models.BigAutoField(primary_key=True)
+    Name = models.CharField(max_length=100)
+    PriceUnit =  models.IntegerField()
+
+    class Meta:
+        db_table = "department"
