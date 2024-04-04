@@ -1,0 +1,37 @@
+{% load static %}
+
+<!DOCTYPE html> 
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} {%endblock%} | Blogapp</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <script type="text/javascript" src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'js/jquery.modal.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/jquery.modal.min.css' %}">
+
+</head>
+
+<body>
+   
+
+<header id="header">
+    <img id="logo-header" src="{% static 'Images/apple-touch-icon.png' %}" alt="Hospital Logo">
+    <h1 id="head">The Great Hospital</h1>
+    <nav class="ana-menu">
+
+    <a href="home">Home Page</a>
+    <a href="Management">Go to Management</a><a href="Account/LogOff">Log off</a>
+    </nav>
+</header>
+{% block content %}{% endblock %}
+
+    <footer class="footer"> 
+        <p>©Fsmvu 2023 Web Design Project</p>
+    </footer>
+
+
+
+
+</body></html>
