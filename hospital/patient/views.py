@@ -1,7 +1,17 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-# Create your views here.
 
+# Create your views here.
 def home(request):
-    #return HttpResponse('Hello world!')
-    return HttpResponse("Hello world")
+    return False
+
+def details(request): #param id
+    return False
+
+def create(request):
+    return False
+
+def edit(request):
+    return False
+
+def delete(request):
+    return False
