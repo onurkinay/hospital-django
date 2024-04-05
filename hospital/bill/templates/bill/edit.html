@@ -1,42 +1,22 @@
-{% extends "management_base.html" %}
+{% extends 'management_base.html' %}
 
 {% load static %}
-{% block title %} Appointment {% endblock %}
+{% block title %}
+  Appointment
+{% endblock %}
 {% block content %}
-
-<section id="randevu-al-container">
+  <section id="randevu-al-container">
     <h2 class="container-header">Edit Bill</h2>
     <div class="randevu-al">
-<form action="https://localhost:44328/Bills/Edit/3" method="post"><input name="__RequestVerificationToken" type="hidden" value="SuppIiFD3EeVRCGtkcD2HXRtFT56Pu2MwH6jo-I8D-x1Bepkspd-JlXxaPNAf5T5eH6F8SHpi5qPbgOhbkpxvM2UMVMaOU4QQuXphM2D50RgP6uwiMm4K4DTL66gtWavVYFMC8dV4oMJeKjdUrTxrg2"><input data-val="true" data-val-number="The field Id must be a number." data-val-required="Id alanı gereklidir." id="Id" name="Id" type="hidden" value="3"><input data-val="true" data-val-number="The field Appointment_ID must be a number." data-val-required="Appointment_ID alanı gereklidir." id="Appointment_ID" name="Appointment_ID" type="hidden" value="3">            <div class="form-group">
-                <label for="randevu-tarihi">Issued Date</label>
-                <input class="form-control" data-val="true" data-val-date="The field Issued Date must be a date." data-val-required="Issued Date alanı gereklidir." id="Issued_Date" max="2024-04-04T00:00" name="Issued_Date" required="required" type="datetime-local" value="2024-01-08T15:12:13">
-                <span class="field-validation-valid text-danger" data-valmsg-for="Issued_Date" data-valmsg-replace="true"></span>
-            </div>
-            <div class="form-group">
-                <label for="randevu-sebebi">Amount</label>
-                <input class="form-control text-box single-line" data-val="true" data-val-number="The field Amount must be a number." data-val-required="Amount alanı gereklidir." id="Amount" name="Amount" type="text" value="100">
-                <span class="field-validation-valid text-danger" data-valmsg-for="Amount" data-valmsg-replace="true"></span>
-            </div>
-            <div class="form-group">
-                <label for="randevu-sebebi">Is Paid?</label>
-                <input checked="checked" data-val="true" data-val-required="Is Paid? alanı gereklidir." htmlattributes="{ class = form-control }" id="IsPaid" name="IsPaid" type="checkbox" value="true"><input name="IsPaid" type="hidden" value="false">
-                <span class="field-validation-valid text-danger" data-valmsg-for="IsPaid" data-valmsg-replace="true"></span>
-            </div>
-            <div class="form-group">
-                <label>
-                    Appointment
-                </label>
-                <select class="form-control" disabled="disabled" id="Appointment_ID" name="Appointment_ID"><option value="1">gene kontrol</option>
-<option selected="selected" value="3">kontrol</option>
-<option value="1002">asdasd</option>
-</select>
-                <span class="field-validation-valid text-danger" data-valmsg-for="Appointment_ID" data-valmsg-replace="true"></span>
-            </div>
-            <div class="form-group">
-                <input id="btn" type="submit" value="Edit Edit">
-            </div>
-</form>    </div>
-</section>
+      <form method="post">
+        {% csrf_token %}
 
-
-{%endblock%}
+        <!-- Using the formset -->
+        {{ form.as_p }}
+        <div class="form-group">
+          <input id="btn" type="submit" value="Edit" />
+        </div>
+      </form>
+    </div>
+  </section>
+{% endblock %}
