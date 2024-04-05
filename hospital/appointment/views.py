@@ -7,7 +7,8 @@ from django.shortcuts import (get_object_or_404,
 from django.shortcuts import render
 from .models import Appointment
 from .forms import AppointmentForm
-# Create your views here.
+
+
 def home(request):
     context ={} 
     context["dataset"] = Appointment.objects.all()

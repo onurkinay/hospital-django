@@ -17,9 +17,9 @@ class AppointmentForm(forms.ModelForm):
         widgets = { 
             'Description': forms.Textarea(attrs={'class': 'form-control','style':'width: 100%'}),
             'AppointmentDate': forms.DateInput(
-                format=('%Y-%m-%d'),
+                format=('%Y-%m-%d %H:%M:%S'),
                 attrs={'class': 'form-control', 
                        'placeholder': 'Select a date',
-                       'type': 'date'  # <--- IF I REMOVE THIS LINE, THE INITIAL VALUE IS DISPLAYED
+                       'type': 'datetime-local'  
                       }),
         }
