@@ -64,6 +64,7 @@ def create(request):
 
 
 def edit(request,id):  
+
     context ={}
     obj = get_object_or_404(Doctor, ID = id)
   
@@ -110,6 +111,9 @@ def edit(request,id):
     context["form"] = form 
     context["user"] = User.objects.get(id = obj.User_id)
     return render(request, "doctor/edit.html", context) 
+
+  
+   
 
 def delete(request,id):
     obj = get_object_or_404(Doctor, ID = id)

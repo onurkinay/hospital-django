@@ -18,16 +18,19 @@
           <div class="col col-3">Doctor Name</div>
           <div class="col col-6">Actions</div>
         </li>
-        <li class="table-row">
-          <div class="col col-1" data-label="Date">26.01.2024 13:49:00</div>
-          <div class="col col-3" data-label="Doctor Name">Ahmet</div>
 
-          <div class="col col-6" data-label="Change Appointment Operation">
-            <a href="/Appointments/Edit/1">Edit</a> |
-            <a class="getDetails" href="/Appointments/Details/1">Details</a> |
-            <a class="deleteApp" href="/Appointments/Delete/1">Delete</a>
-          </div>
-        </li>
+        {% for data in dataset %}
+          <li class="table-row">
+            <div class="col col-1" data-label="Date">{{ data.AppointmentDate }}</div>
+            <div class="col col-3" data-label="Doctor Name">{{ data.DoctorID.User.first_name }} {{ data.DoctorID.User.last_name }}</div>
+
+            <div class="col col-6" data-label="Change Appointment Operation">
+              <a href="/Appointments/Edit/{{ data.ID }}">Edit</a> |
+              <a class="getDetails" href="/Appointments/Details/{{ data.ID }}/">Details</a> |
+              <a class="deleteApp" href="/Appointments/Delete/{{ data.ID }}/">Delete</a>
+            </div>
+          </li>
+        {% endfor %}
       </ul>
     </div>
   </section>
@@ -55,14 +58,11 @@
   </div>
   <script>
     $('.deleteApp').click(function (event) {
-      //linke click eventi kazandırma
       event.preventDefault()
       if (confirm('Do you sure delete this appointment')) {
         $.ajax({
           url: this.href,
-          data: {
-            __RequestVerificationToken: gettoken()
-          },
+          data: { csrfmiddlewaretoken: '{{ csrf_token }}' },
           type: 'POST',
           success: function (result) {
             location.reload()

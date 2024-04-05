@@ -1,18 +1,25 @@
 from django import forms
 from .models import Appointment
  
- 
-# creating a form
+  
 class AppointmentForm(forms.ModelForm):
- 
-    # create meta class
-    class Meta:
-        # specify model to be used
+  
+    class Meta: 
         model = Appointment
- 
-        # specify fields to be used
+  
         fields = [
+            "DoctorID", 
+            "AppointmentDate", 
             "Description",
-            "AppointmentDate",
-            "DoctorID"
+            "PatientID"
         ]
+
+        widgets = { 
+            'Description': forms.Textarea(attrs={'class': 'form-control','style':'width: 100%'}),
+            'AppointmentDate': forms.DateInput(
+                format=('%Y-%m-%d'),
+                attrs={'class': 'form-control', 
+                       'placeholder': 'Select a date',
+                       'type': 'date'  # <--- IF I REMOVE THIS LINE, THE INITIAL VALUE IS DISPLAYED
+                      }),
+        }

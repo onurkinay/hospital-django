@@ -1,35 +1,69 @@
-#Appointment
+from django.http import JsonResponse, HttpResponseBadRequest
+from django.shortcuts import (get_object_or_404,
+                              render,
+                              HttpResponseRedirect)
+ 
+
 from django.shortcuts import render
 from .models import Appointment
 from .forms import AppointmentForm
 # Create your views here.
 def home(request):
-    return render(request,'appointment/home.html')
+    context ={} 
+    context["dataset"] = Appointment.objects.all()
+         
+    return render(request, "appointment/home.html", context)
 
 def details(request,id): #param id
-    return False
+    queryset = Appointment.objects.filter(ID=id).values()
+    return JsonResponse({"Appointment": list(queryset)})
 
 def create(request):
-    if request.method == "GET":
-        # dictionary for initial data with 
-        # field names as keys
-        context ={}
+   
+    # dictionary for initial data with 
+    # field names as keys
+    context ={}
  
     # add the dictionary during initialization
-        form = AppointmentForm(request.POST or None)
-        if form.is_valid():
-            form.save()
+    form = AppointmentForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return HttpResponseRedirect("/Appointments/")
          
-        context['form']= form
-        return render(request, "appointment/create.html", context)
-    elif request.method == "POST":
-        return False
+    context['form']= form
+    return render(request, "appointment/create.html", context)
+    
 
 def edit(request,id):
-    if request.method == "GET":
-        return render(request,'appointment/edit.html')
-    elif request.method == "POST":
-        return False
+    # dictionary for initial data with 
+    # field names as keys
+    context ={}
+ 
+    # fetch the object related to passed id
+    obj = get_object_or_404(Appointment, ID= id)
+ 
+    # pass the object as instance in form
+    form = AppointmentForm(request.POST or None, instance = obj)
+ 
+    # save the data from the form and
+    # redirect to detail_view
+    if form.is_valid():
+        form.save()
+        return HttpResponseRedirect("/Appointments/")
+ 
+    # add form dictionary to context
+    context["form"] = form
+ 
+    return render(request, "appointment/edit.html", context)
 
-def delete(request):
-    return False
+def delete(request,id):
+    obj = get_object_or_404(Appointment, ID = id)
+  
+    if request.method =="POST":
+        # delete object
+        obj.delete()
+        # after deleting redirect to 
+        # home page
+        return HttpResponseRedirect("/Appointments/")
+ 
+    return HttpResponseBadRequest('<h1>You are not authorized to view this page</h1>')

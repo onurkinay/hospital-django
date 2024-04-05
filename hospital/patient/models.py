@@ -27,3 +27,5 @@ class Patient(models.Model):
 
     class Meta:
         db_table = "patient"
+    def __str__(self):
+        return str(self.User.first_name+" "+self.User.last_name)
