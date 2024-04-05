@@ -9,7 +9,7 @@ from .models import Doctor
 from .forms import DoctorForm
 import logging
 import urllib
-logger = logging.getLogger('app_api')
+#logger = logging.getLogger('app_api')
 
 def home(request):
     context ={} 
@@ -41,7 +41,7 @@ def create(request):
         password =   result[0].pop("password")
         password_confirm =  result[0].pop("passwordconfirm")
  
-        logger.error(result[0])
+        #logger.error(result[0])
 
         query_dict = QueryDict('', mutable=True)
         query_dict.update(result[0])
@@ -63,8 +63,7 @@ def create(request):
     return render(request, "doctor/create.html", context)
 
 
-def edit(request,id): #not edited doctor
-
+def edit(request,id):  
     context ={}
     obj = get_object_or_404(Doctor, ID = id)
   
@@ -112,14 +111,7 @@ def edit(request,id): #not edited doctor
     context["user"] = User.objects.get(id = obj.User_id)
     return render(request, "doctor/edit.html", context) 
 
-  
-   
-
 def delete(request,id):
-    context ={}
-    if id == 1:
-        HttpResponseBadRequest('<h1>You are not delete special Doctor</h1>')
-    # fetch the object related to passed id
     obj = get_object_or_404(Doctor, ID = id)
  
  

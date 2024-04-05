@@ -11,7 +11,9 @@ BLOOD_GROUPS = (
     ("3", "0 Rh+"), 
     ("4", "A Rh-"), 
     ("5", "B Rh-"), 
-    ("6", "0 Rh-")
+    ("6", "0 Rh-"),
+    ("7","AB Rh+"),
+    ("8","AB Rh-")
 )
 
 class Patient(models.Model):

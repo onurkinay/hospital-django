@@ -1,14 +1,6 @@
 from django.conf import settings
 from django.db import models
 from department.models import Department
-BLOOD_GROUPS = ( 
-    ("1", "A Rh+"), 
-    ("2", "B Rh+"), 
-    ("3", "0 Rh+"), 
-    ("4", "A Rh-"), 
-    ("5", "B Rh-"), 
-    ("6", "0 Rh-")
-)
 
 GENDER_CHOICES = (
         ('M', 'Male'),

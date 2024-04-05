@@ -1,118 +1,121 @@
-{% extends "management_base.html" %}
+{% extends 'management_base.html' %}
 
 {% load static %}
-{% block title %} Patients {% endblock %}
+{% block title %}
+  Patients
+{% endblock %}
 {% block content %}
-
-<section id="hasta-yonetimi">
+  <section id="hasta-yonetimi">
     <div class="container">
-        <h2>Patients</h2>
+      <h2>Patients</h2>
 
-            <ul class="responsive-table">
-                <li class="table-header">
-                    <div class="col col-1">Name</div>
-                    <div class="col col-2">City</div>
-                    <div class="col col-3">Email</div>
-                    <div class="col col-4">Actions</div>
-                </li>
-                    <li class="table-row">
-                        <div class="col col-1" data-label="Job Id">Patient One</div>
-                        <div class="col col-2" data-label="Doctor Name">İstanbul</div>
-                        <div class="col col-3" data-label="Department">p1@hospital.com</div>
-                        <div class="col col-4" data-label="Operation">
-                            <a href="/Patients/Edit/1">Edit</a> |
-                            <a class="getDetails" href="/Patients/Details/1">Details</a> |
-                            <a class="delete" href="/Patients/Delete/c94d210e-e2c8-4786-87d8-625f3b541044">Delete</a>
-                        </div>
-                    </li>
-                    <li class="table-row">
-                        <div class="col col-1" data-label="Job Id">Mehmet Yılmaz</div>
-                        <div class="col col-2" data-label="Doctor Name">İstanbul</div>
-                        <div class="col col-3" data-label="Department">p4@hospital.com</div>
-                        <div class="col col-4" data-label="Operation">
-                            <a href="/Patients/Edit/2">Edit</a> |
-                            <a class="getDetails" href="/Patients/Details/2">Details</a> |
-                            <a class="delete" href="/Patients/Delete/ac0c111b-85e6-477f-b2ba-ce709ffa6a24">Delete</a>
-                        </div>
-                    </li>
-            </ul>
-     </div>
-</section>
-
- 
-    <div id="ex1" class="modal" style="max-width:initial">
-        <section id="ozel-sayfa" style="padding:0;margin-bottom:0">
-            <div class="container" style="max-width:initial">
-                <div class="kisisel-bilgiler">
-                    <h3>Personal Information</h3>
-                    <ul>
-                        <li class="patNameSurname"><span>Name Surname:</span> </li>
-                        <li class="patDoB"><span>Date of Birth:</span> </li>
-                        <li class="patNumber"><span>Phone Number:</span> </li>
-                        <li class="patEmail"><span>E-Mail Address:</span></li>
-                        <li class="patGender"><span>Gender:</span></li>
-                    </ul>
-                </div>
-                <div class="hesap-bilgileri">
-                    <h3>-</h3>
-                    <ul>
-                        <li class="patBlood"><span>Blood Group:</span></li>
-                        <li class="patAddress"><span>Address:</span> </li>
-                        <li class="patCity"><span>City:</span></li>
-                    </ul>
-                </div>
+      <ul class="responsive-table">
+        <li class="table-header">
+          <div class="col col-1">Name</div>
+          <div class="col col-2">City</div>
+          <div class="col col-3">Email</div>
+          <div class="col col-4">Actions</div>
+        </li>
+        {% for data in dataset %}
+          <li class="table-row">
+            <div class="col col-1" data-label="Job Id">{{ data.User.first_name }} {{ data.User.last_name }}</div>
+            <div class="col col-2" data-label="City">{{ data.get_Blood_Group_display }}</div>
+            <div class="col col-3" data-label="Email">{{ data.User.email }}</div>
+            <div class="col col-4" data-label="Operation">
+              <a href="/Patients/Edit/{{ data.ID }}/">Edit</a> |
+              <a class="getDetails" href="/Patients/Details/{{ data.ID }}">Details</a> |
+              <a class="delete" href="/Patients/Delete/{{ data.ID }}">Delete</a>
             </div>
-        </section>
+          </li>
+        {% endfor %}
+      </ul>
     </div>
+  </section>
 
+  <div id="ex1" class="modal" style="max-width:initial">
+    <section id="ozel-sayfa" style="padding:0;margin-bottom:0">
+      <div class="container" style="max-width:initial">
+        <div class="kisisel-bilgiler">
+          <h3>Personal Information</h3>
+          <ul>
+            <li class="patNameSurname">
+              <span>Name Surname:</span>
+            </li>
+            <li class="patDoB">
+              <span>Date of Birth:</span>
+            </li>
+            <li class="patNumber">
+              <span>Phone Number:</span>
+            </li>
+            <li class="patEmail">
+              <span>E-Mail Address:</span>
+            </li>
+            <li class="patGender">
+              <span>Gender:</span>
+            </li>
+          </ul>
+        </div>
+        <div class="hesap-bilgileri">
+          <h3>-</h3>
+          <ul>
+            <li class="patBlood">
+              <span>Blood Group:</span>
+            </li>
+            <li class="patAddress">
+              <span>Address:</span>
+            </li>
+            <li class="patCity">
+              <span>City:</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </div>
 
-    <script>
-     function gettoken() {
-        var token = '<input name="__RequestVerificationToken" type="hidden" value="c31vgnq7PKWsB9UipaBhH_ihmC0ZbzMHo30kMUBNjPorUM4Q3Emrw23PC557dInorSRAE5f1B7wQH9RcR--PwdhlqADPzfNufGheVdfi_sGFoOncJUVW5P9I-oo6DCbK3jnWq3bs2EJuFVuEwTbAiQ2" />';
-        token = $(token).val();
-        return token;
+  <script>
+    function gettoken() {
+      var token = '<input name="__RequestVerificationToken" type="hidden" value="c31vgnq7PKWsB9UipaBhH_ihmC0ZbzMHo30kMUBNjPorUM4Q3Emrw23PC557dInorSRAE5f1B7wQH9RcR--PwdhlqADPzfNufGheVdfi_sGFoOncJUVW5P9I-oo6DCbK3jnWq3bs2EJuFVuEwTbAiQ2" />'
+      token = $(token).val()
+      return token
     }
-
-
-    $('.delete').click(function (event) {//linke click eventi kazandırma
-        event.preventDefault();
-        if (confirm("Do you sure delete this Patient")) {
-            $.ajax({
-                url: this.href,
-                data: {
-                    __RequestVerificationToken: gettoken()
-                },
-                type: 'POST',
-                success: function (result) {
-                    location.reload();
-                }
-            });
-        }
-
-    });
-       //hasta tarafı
-    $('.getDetails').click(function (event) {//linke click eventi kazandırma
-        event.preventDefault();
-        this.blur();
-        $.get(this.href, function (json) {
-            const patient = JSON.parse(json)
-            $('li.patNameSurname').html('<span>Name Surname:</span> ' + patient.Name + " " + patient.Surname)
-            $('li.patDoB').html('<span>Date of Birth:</span> ' + (new Date(patient.DOB)).toLocaleDateString())
-            $('li.patNumber').html('<span>Phone Number:</span> ' + patient.Phone)
-            $('li.patEmail').html('<span>Email:</span> ' + patient.Email)
-            $('li.patGender').html('<span>Gender:</span> ' + ((patient.Gender) ? "Male" : "Female"))
-            $('li.patBlood').html('<span>Blood Group:</span> ' + patient.Blood_Group)
-            $('li.patAddress').html('<span>Address:</span> ' + patient.Address)
-            $('li.patCity').html('<span>City:</span> ' + patient.City)
-
-            $('#ex1').modal();
-        });
-    });
-
-       //hasta tarafı
-
-    </script>
-
-
-
-{%endblock%}
+    
+    $('.delete').click(function (event) {
+      //linke click eventi kazandırma
+      event.preventDefault()
+      if (confirm('Do you sure delete this Patient')) {
+        $.ajax({
+          url: this.href,
+          data: {
+            csrfmiddlewaretoken: '{{ csrf_token }}'
+          },
+          type: 'POST',
+          success: function (result) {
+            location.reload()
+          }
+        })
+      }
+    })
+    //hasta tarafı
+    $('.getDetails').click(function (event) {
+      //linke click eventi kazandırma
+      event.preventDefault()
+      this.blur()
+      $.get(this.href, function (json) {
+        const patient = JSON.parse(json)
+        $('li.patNameSurname').html('<span>Name Surname:</span> ' + patient.Name + ' ' + patient.Surname)
+        $('li.patDoB').html('<span>Date of Birth:</span> ' + new Date(patient.DOB).toLocaleDateString())
+        $('li.patNumber').html('<span>Phone Number:</span> ' + patient.Phone)
+        $('li.patEmail').html('<span>Email:</span> ' + patient.Email)
+        $('li.patGender').html('<span>Gender:</span> ' + (patient.Gender ? 'Male' : 'Female'))
+        $('li.patBlood').html('<span>Blood Group:</span> ' + patient.Blood_Group)
+        $('li.patAddress').html('<span>Address:</span> ' + patient.Address)
+        $('li.patCity').html('<span>City:</span> ' + patient.City)
+    
+        $('#ex1').modal()
+      })
+    })
+    
+    //hasta tarafı
+  </script>
+{% endblock %}
