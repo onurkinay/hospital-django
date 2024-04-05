@@ -1,24 +1,53 @@
 #Prescription
+from django.http import JsonResponse, HttpResponseBadRequest
+from django.shortcuts import (get_object_or_404,
+                              render,
+                              HttpResponseRedirect)
+
 from django.shortcuts import render
 
-# Create your views here.
+from .models import Prescription
+from .forms import PrescriptionForm 
 def home(request):
-    return render(request,'prescription/home.html')
+    context ={}
+  
+    context["dataset"] = Prescription.objects.all() 
+    return render(request, "prescription/home.html", context)
 
-def details(request,id): #param id, json return
-    return False
+def details(request,id): 
+    queryset = Prescription.objects.filter(ID=id).values()
+    return JsonResponse({"Prescription": list(queryset)})
 
 def create(request, id):
-    if request.method == "GET":
-        return render(request,'prescription/create.html')
-    elif request.method == "POST":
-        return False
+    context ={}
+  
+    form = PrescriptionForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+         
+    context['form']= form
+    return render(request, "prescription/create.html", context)
 
 def edit(request,id):
-    if request.method == "GET":
-        return render(request,'prescription/edit.html')
-    elif request.method == "POST":
-        return False
+    context ={}
+  
+    obj = get_object_or_404(Prescription, ID = id)
+  
+    form = PrescriptionForm(request.POST or None, instance = obj)
+  
+    if form.is_valid():
+        form.save()
+        return HttpResponseRedirect("/"+id)
+  
+    context["form"] = form
+    return render(request, "prescription/edit.html", context)
 
 def delete(request):
-    return False
+    obj = get_object_or_404(Prescription, ID = id)
+  
+    if request.method =="POST": 
+        obj.delete() 
+        return HttpResponseRedirect("/Prescriptions/")
+ 
+    return HttpResponseBadRequest('<h1>You are not authorized to view this page</h1>')
+

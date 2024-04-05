@@ -10,19 +10,16 @@ from django.shortcuts import render
 from .models import Bill
 from .forms import BillForm
  
-
-# Create your views here.
+ 
 def home(request):
     context ={}
- 
-    # add the dictionary during initialization
-    context["dataset"] = Bill.objects.all()
-         
+  
+    context["dataset"] = Bill.objects.all() 
     return render(request, "bill/home.html", context)
 
 def details(request): #param id
     queryset = Bill.objects.filter(ID=id).values()
-    return JsonResponse({"Appointment": list(queryset)})
+    return JsonResponse({"Bill": list(queryset)})
 
 def create(request): 
     context ={}

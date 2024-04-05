@@ -6,7 +6,7 @@ class Prescription(models.Model):
     Medicinde = models.CharField(max_length=30)
     Remark = models.TextField()
     Advice = models.TextField()
-    Appointment_ID = models.ForeignKey(Appointment, on_delete=models.CASCADE)
+    Appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE)
 
     class Meta:
         db_table = "prescription"
