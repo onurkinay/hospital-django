@@ -23,7 +23,7 @@
             <div class="col col-1" data-label="Job Id"> {{ data.Name }}</div>
   
             <div class="col col-4" data-label="Operation">
-              <a href="/Departments/Edit/{{data.ID}}">Edit</a> | Can't be deleted
+              <a href="/Departments/Edit/{{data.ID}}">Edit</a> | <a class="delete"href="/Departments/Delete/{{data.ID}}/">Delete</a>
             </div>
           </li>
 
@@ -34,4 +34,29 @@
       </ul>
     </div>
   </section>
+
+  
+
+<script> 
+    
+   $('.delete').click(function (event) {//linke click eventi kazandırma
+       event.preventDefault();
+       if (confirm("Do you sure delete this department")) {
+           $.ajax({
+               url: this.href,
+               data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+               },
+               type: 'POST',
+               success: function (result) {
+                   location.reload();
+               }
+           });
+       }
+
+   });
+    
+
+</script>
+
 {% endblock %}

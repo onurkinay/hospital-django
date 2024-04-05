@@ -22,6 +22,7 @@ def create(request):
     form = DepartmentForm(request.POST or None)
     if form.is_valid():
         form.save()
+        return HttpResponseRedirect("/Departments/")
          
     context['form']= form
     return render(request, "department/create.html", context)
@@ -47,7 +48,7 @@ def delete(request,id):
     obj = get_object_or_404(Department, ID = id)
  
  
-    if request.method =="GET":
+    if request.method =="POST":
         # delete object
         obj.delete()
         # after deleting redirect to 
