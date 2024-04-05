@@ -1,53 +1,37 @@
-{% extends "management_base.html" %}
+{% extends 'management_base.html' %}
 
 {% load static %}
-{% block title %} Departments {% endblock %}
+{% block title %}
+  Departments
+{% endblock %}
 {% block content %}
-
-<section id="doktor-yonetimi">
+  <section id="doktor-yonetimi">
     <div class="container">
-        <h2 style="display:inline">Departments</h2>
-            <div class="addButton">
-                <a class="addButtonInside" href="/Departments/Create">Add Department</a>
+      <h2 style="display:inline">Departments</h2>
+      <div class="addButton">
+        <a class="addButtonInside" href="/Departments/Create">Add Department</a>
+      </div>
+      <div class="bosluk"></div>
+      <ul class="responsive-table">
+        <li class="table-header">
+          <div class="col col-1">Department Name</div>
+          <div class="col col-4">Actions</div>
+        </li>
+        {% for data in dataset %}
+   
+        <li class="table-row">
+            <div class="col col-1" data-label="Job Id"> {{ data.Name }}</div>
+  
+            <div class="col col-4" data-label="Operation">
+              <a href="/Departments/Edit/{{data.ID}}">Edit</a> | Can't be deleted
             </div>
-            <div class="bosluk"> </div>
-            <ul class="responsive-table">
-                    <li class="table-header">
-                        <div class="col col-1">Department Name</div>
-                        <div class="col col-4">Actions</div>
-                    </li>
-                        <li class="table-row">
-                            <div class="col col-1" data-label="Job Id">General Surgery</div>
+          </li>
 
-                            <div class="col col-4" data-label="Operation">
-                                <a href="/Departments/Edit/1">Edit</a> |
-Can't be deleted                            </div>
-                        </li>
-                        <li class="table-row">
-                            <div class="col col-1" data-label="Job Id">Otorhinolaryngology</div>
-
-                            <div class="col col-4" data-label="Operation">
-                                <a href="/Departments/Edit/2">Edit</a> |
-<a class="delete" href="/Departments/Delete/2">Delete</a>                            </div>
-                        </li>
-                        <li class="table-row">
-                            <div class="col col-1" data-label="Job Id">Thoracic Surgery</div>
-
-                            <div class="col col-4" data-label="Operation">
-                                <a href="/Departments/Edit/3">Edit</a> |
-<a class="delete" href="/Departments/Delete/3">Delete</a>                            </div>
-                        </li>
-                        <li class="table-row">
-                            <div class="col col-1" data-label="Job Id">Gynaecology</div>
-
-                            <div class="col col-4" data-label="Operation">
-                                <a href="/Departments/Edit/4">Edit</a> |
-<a class="delete" href="/Departments/Delete/4">Delete</a>                            </div>
-                        </li>
-            </ul>
-        </div>
-
-</section>
-
-{%endblock%}
-
+     
+        {% endfor %}
+      
+     
+      </ul>
+    </div>
+  </section>
+{% endblock %}

@@ -1,20 +1,17 @@
-{% extends "management_base.html" %}
+{% extends 'management_base.html' %}
 
 {% load static %}
-{% block title %} Create Department {% endblock %}
+{% block title %}
+  Create Department
+{% endblock %}
 {% block content %}
+  <form action="/Departments/Create/" method="post">
+    <section id="ozel-sayfa">
+      <h2 style="margin-left: 13%;">Add Department</h2>
 
-
-<form action="/Departments/Create" method="post"> 
-      <section id="ozel-sayfa">
-    <h2 style="margin-left: 13%;">Add Department</h2>
-   
-    
-
-    <div class="container" style="display:block">
-
+      <div class="container" style="display:block">
         <div class="kisisel-bilgiler" style="width:initial">
-            <ul>
+          <!--   <ul>
                 <li>
                     <span>Name:</span>    <input class="form-control text-box single-line" data-val="true" data-val-required="Department Name alanı gereklidir." id="Name" name="Name" type="text" value="">
                     <span class="field-validation-valid text-danger" data-valmsg-for="Name" data-valmsg-replace="true"></span>
@@ -25,13 +22,16 @@
                 </li>
                 <li> <button>Send</button></li>
             </ul>
+             -->
+          <!-- Security token -->
+          {% csrf_token %}
+
+          <!-- Using the formset -->
+          {{ form.as_p }}
+
+          <input type="submit" value="Submit">
         </div>
-
-
-    </div>
-
-</section>
-</form>
-
-{%endblock%}
-
+      </div>
+    </section>
+  </form>
+{% endblock %}

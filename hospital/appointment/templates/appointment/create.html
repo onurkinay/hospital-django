@@ -1,32 +1,42 @@
-{% extends "management_base.html" %}
+{% extends 'management_base.html' %}
 
 {% load static %}
-{% block title %} Appointment {% endblock %}
+{% block title %}
+  Appointment
+{% endblock %}
 {% block content %}
-<section id="randevu-al-container">
+  <section id="randevu-al-container">
     <h2 class="container-header">Create Appointment</h2>
     <div class="randevu-al">
-<form action="https://localhost:44328/Appointments/Create" method="post"><input name="__RequestVerificationToken" type="hidden" value="Wuvye2_bnXKw8BGvI48HN0Ao-MbkCrmGmxjW2q3SnaFD-ImOZ_0BVWnigdZ9rmEMQtTkM1952gSGCGxKnVXyanwgmEh9bm97lPdBwcW2JwaUivpW5BteLGzEQq73R7kq0Lkqqtfxdm2CT1dYaWyOgQ2">            <div class="form-group">
-                <label for="doktor-id">Doctor</label>
-                <select id="Doctor_ID" name="Doctor_ID"><option value="1">Ahmet - General Surgery</option>
-<option value="3">Mustafa - Otorhinolaryngology</option>
-</select>
-                <span class="field-validation-valid text-danger" data-valmsg-for="Doctor_ID" data-valmsg-replace="true"></span>
-            </div>
-            <div class="form-group">
-                <label for="randevu-tarihi">Date of Appointment</label>
-                <input class="form-control" data-val="true" data-val-date="The field Appointment Date must be a date." data-val-required="Appointment Date alanı gereklidir." id="AppointmentDate" min="2024-04-04T00:00" name="AppointmentDate" required="required" type="datetime-local" value="">
-                <span class="field-validation-valid text-danger" data-valmsg-for="AppointmentDate" data-valmsg-replace="true"></span>
-            </div>
-            <div class="form-group">
-                <label for="randevu-sebebi">Description</label>
-                <input class="text-box single-line" data-val="true" data-val-required="Description is required" id="Description" name="Description" type="text" value="">
-                <span class="field-validation-valid text-danger" data-valmsg-for="Description" data-valmsg-replace="true"></span>
-            </div>
-            <div class="form-group">
-                <input id="btn" type="submit" value="Create Appointment">
-            </div>
-</form>    </div>
-</section>
+      <form action="https://localhost:44328/Appointments/Create" method="post">
+        <!-- <div class="form-group">
+          <label for="doktor-id">Doctor</label>
+          <select id="Doctor_ID" name="Doctor_ID">
+            <option value="1">Ahmet - General Surgery</option>
+            <option value="3">Mustafa - Otorhinolaryngology</option>
+          </select>
+          <span class="field-validation-valid text-danger" data-valmsg-for="Doctor_ID" data-valmsg-replace="true"></span>
+        </div>
+        <div class="form-group">
+          <label for="randevu-tarihi">Date of Appointment</label>
+          <input class="form-control" data-val="true" data-val-date="The field Appointment Date must be a date." data-val-required="Appointment Date alanı gereklidir." id="AppointmentDate" min="2024-04-04T00:00" name="AppointmentDate" required="required" type="datetime-local" value="" />
+          <span class="field-validation-valid text-danger" data-valmsg-for="AppointmentDate" data-valmsg-replace="true"></span>
+        </div>
+        <div class="form-group">
+          <label for="randevu-sebebi">Description</label>
+          <input class="text-box single-line" data-val="true" data-val-required="Description is required" id="Description" name="Description" type="text" value="" />
+          <span class="field-validation-valid text-danger" data-valmsg-for="Description" data-valmsg-replace="true"></span>
+        </div> -->
+        <!-- Security token -->
+        {% csrf_token %}
 
+        <!-- Using the formset -->
+        {{ form.as_p }}
+
+        <div class="form-group">
+          <input id="btn" type="submit" value="Create Appointment" />
+        </div>
+      </form>
+    </div>
+  </section>
 {% endblock %}

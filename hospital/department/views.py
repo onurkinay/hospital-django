@@ -1,22 +1,59 @@
-from django.shortcuts import render
+from django.http import JsonResponse, HttpResponseBadRequest
+from django.shortcuts import (get_object_or_404,
+                              render,
+                              HttpResponseRedirect)
 
+from .models import Department
+from .forms import DepartmentForm
 # Create your views here.
 def home(request):
-     return render(request,'department/home.html')
+    context ={} 
+    context["dataset"] = Department.objects.all()
+         
+    return render(request, "department/home.html", context)
 
-def details(request): #param id
-    return False
+def details(request,id): 
+    queryset = Department.objects.filter(ID=id).values()
+    return JsonResponse({"department": list(queryset)})
 
 def create(request):
-    if request.method == "GET":
-        return render(request,'department/create.html')
-    elif request.method == "POST":
-        return False
+    context ={}
+  
+    form = DepartmentForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+         
+    context['form']= form
+    return render(request, "department/create.html", context)
 
-def edit(request,id):
-     return render(request,'department/edit.html')
 
-def delete(request):
-    return False
+def edit(request,id): 
+    context ={}
+  
+    obj = get_object_or_404(Department, ID = id)
+  
+    form = DepartmentForm(request.POST or None, instance = obj) 
+    if form.is_valid():
+        form.save()
+        return HttpResponseRedirect("/Departments/")
+  
+    context["form"] = form 
+    return render(request, "department/edit.html", context)
+
+def delete(request,id):
+    context ={}
+ 
+    # fetch the object related to passed id
+    obj = get_object_or_404(Department, ID = id)
+ 
+ 
+    if request.method =="GET":
+        # delete object
+        obj.delete()
+        # after deleting redirect to 
+        # home page
+        return HttpResponseRedirect("/Departments/")
+ 
+    return HttpResponseBadRequest('<h1>You are not authorized to view this page</h1>')
 
 

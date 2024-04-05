@@ -1,103 +1,96 @@
-{% extends "management_base.html" %}
+{% extends 'management_base.html' %}
 
 {% load static %}
-{% block title %} Appointment {% endblock %}
+{% block title %}
+  Appointment
+{% endblock %}
 {% block content %}
-<section id="randevular">
-
+  <section id="randevular">
     <div class="container">
-        <h2 style="display:inline">Appointments</h2>
-            <div class="addButton">
-                <a class="addButtonInside" href="/Appointments/Create">Add Appointment</a>
-            </div>
-            <div class="bosluk"> </div>
-        <ul class="responsive-table"> 
-                <li class="table-header">
-                    <div class="col col-1">Date/Time</div>
-                        <div class="col col-3">Doctor Name</div>
-                    <div class="col col-6">Actions</div>
-                </li>
-                            <li class="table-row">
-                    <div class="col col-1" data-label="Date">
-                        26.01.2024 13:49:00
-                    </div>
-<div class="col col-3" data-label="Doctor Name">Ahmet</div>
+      <h2 style="display:inline">Appointments</h2>
+      <div class="addButton">
+        <a class="addButtonInside" href="/Appointments/Create">Add Appointment</a>
+      </div>
+      <div class="bosluk"></div>
+      <ul class="responsive-table">
+        <li class="table-header">
+          <div class="col col-1">Date/Time</div>
+          <div class="col col-3">Doctor Name</div>
+          <div class="col col-6">Actions</div>
+        </li>
+        <li class="table-row">
+          <div class="col col-1" data-label="Date">26.01.2024 13:49:00</div>
+          <div class="col col-3" data-label="Doctor Name">Ahmet</div>
 
-
-                    <div class="col col-6" data-label="Change Appointment Operation">
-                        <a href="/Appointments/Edit/1">Edit</a> |
-                        <a class="getDetails" href="/Appointments/Details/1">Details</a> |
-                        <a class="deleteApp" href="/Appointments/Delete/1">Delete</a>
-                    </div>
-                </li>
-        </ul>
+          <div class="col col-6" data-label="Change Appointment Operation">
+            <a href="/Appointments/Edit/1">Edit</a> |
+            <a class="getDetails" href="/Appointments/Details/1">Details</a> |
+            <a class="deleteApp" href="/Appointments/Delete/1">Delete</a>
+          </div>
+        </li>
+      </ul>
     </div>
+  </section>
 
-</section>
-
-<div id="ex1" class="modal" style="max-width:initial">
+  <div id="ex1" class="modal" style="max-width:initial">
     <section id="ozel-sayfa" style="padding:0;margin-bottom:0">
-        <div class="container" style="max-width:initial">
-            <div class="hesap-bilgileri">
-                <h3>Appointments</h3>
-                <ul>
-                    <li class="dateApp"> </li>
-                    <li class="descApp"></li>
-                </ul>
-            </div>
-            <!-- role based olarak değişmeli-->
-                <div class="kisisel-bilgiler">
-                    <h3>Doctor</h3>
-                    <ul>
-                        <li class="doctorNameSurname"></li>
-                        <li class="doctorDept"></li>
-                    </ul>
-                </div>
-            
+      <div class="container" style="max-width:initial">
+        <div class="hesap-bilgileri">
+          <h3>Appointments</h3>
+          <ul>
+            <li class="dateApp"></li>
+            <li class="descApp"></li>
+          </ul>
         </div>
+        <!-- role based olarak değişmeli -->
+        <div class="kisisel-bilgiler">
+          <h3>Doctor</h3>
+          <ul>
+            <li class="doctorNameSurname"></li>
+            <li class="doctorDept"></li>
+          </ul>
+        </div>
+      </div>
     </section>
-</div>
-<script>
-    $('.deleteApp').click(function (event) {//linke click eventi kazandırma
-        event.preventDefault();
-        if (confirm("Do you sure delete this appointment")) {
-            $.ajax({
-                url: this.href,
-                data: {
-                    __RequestVerificationToken: gettoken()
-                },
-                type: 'POST',
-                success: function (result) {
-                    location.reload();
-                }
-            });
-        }
-
-    });
-</script>
-    <script>
-        //hasta tarafı
-        $('.getDetails').click(function (event) {//linke click eventi kazandırma
-            event.preventDefault();
-            this.blur();
-            $.get(this.href, function (html) {
-                const appointment = JSON.parse(html)//json bilgisi gelir
-                $('li.dateApp').html('<span>Date:</span> ' + (new Date(appointment.AppointmentDate)).toLocaleString())
-                $('li.descApp').html('<span>Description:</span> ' + appointment.Description)
-                $.get("/Doctors/Details/" + appointment.Doctor_ID, function (doctorJson) {
-                    const doctor = JSON.parse(doctorJson)
-                    $('li.doctorNameSurname').html('<span>Name Surname:</span> ' + doctor.Name + " " + doctor.Surname)
-                    $.get("/Departments/getDeptName/" + doctor.CurDeptartmentID, function (department) {
-
-                        $('li.doctorDept').html('<span>Department:</span> ' + department)
-                        $('#ex1').modal();
-                    });
-                });
-
-
-            });
-        });
-        //hasta tarafı
-    </script>
-
+  </div>
+  <script>
+    $('.deleteApp').click(function (event) {
+      //linke click eventi kazandırma
+      event.preventDefault()
+      if (confirm('Do you sure delete this appointment')) {
+        $.ajax({
+          url: this.href,
+          data: {
+            __RequestVerificationToken: gettoken()
+          },
+          type: 'POST',
+          success: function (result) {
+            location.reload()
+          }
+        })
+      }
+    })
+  </script>
+  <script>
+    //hasta tarafı
+    $('.getDetails').click(function (event) {
+      //linke click eventi kazandırma
+      event.preventDefault()
+      this.blur()
+      $.get(this.href, function (html) {
+        const appointment = JSON.parse(html) //json bilgisi gelir
+        $('li.dateApp').html('<span>Date:</span> ' + new Date(appointment.AppointmentDate).toLocaleString())
+        $('li.descApp').html('<span>Description:</span> ' + appointment.Description)
+        $.get('/Doctors/Details/' + appointment.Doctor_ID, function (doctorJson) {
+          const doctor = JSON.parse(doctorJson)
+          $('li.doctorNameSurname').html('<span>Name Surname:</span> ' + doctor.Name + ' ' + doctor.Surname)
+          $.get('/Departments/getDeptName/' + doctor.CurDeptartmentID, function (department) {
+            $('li.doctorDept').html('<span>Department:</span> ' + department)
+            $('#ex1').modal()
+          })
+        })
+      })
+    })
+    //hasta tarafı
+  </script>
 {% endblock %}
