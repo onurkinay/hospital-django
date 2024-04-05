@@ -1,24 +1,135 @@
-#Doctor
-from django.shortcuts import render
+from django.http import JsonResponse, HttpResponseBadRequest
+from django.shortcuts import (get_object_or_404,
+                              render,
+                              HttpResponseRedirect)
 
-# Create your views here.
+from django.contrib.auth.models import User
+from django.http import QueryDict
+from .models import Doctor
+from .forms import DoctorForm
+import logging
+import urllib
+logger = logging.getLogger('app_api')
+
 def home(request):
-    return render(request,'doctor/home.html')
+    context ={} 
+    context["dataset"] = Doctor.objects.all()
+         
+    return render(request, "doctor/home.html", context)
 
-def details(request,id): #param id, json return
-    return False
+def details(request,id): 
+    queryset = Doctor.objects.filter(ID=id).values()
+    return JsonResponse({"Doctor": list(queryset)})
 
 def create(request):
-    if request.method == "GET":
-        return render(request,'doctor/create.html')
-    elif request.method == "POST":
-        return False
+    context ={}
+  
+    result = [{}]
+    if request.method == "POST":
+       
+        for item in str(request.body)[2:-1].split("&"):
+            key, val = item.split("=", 1)
+            if key in result[-1]:
+                result.append({})
+            result[-1][key] = urllib.parse.unquote(val)
 
-def edit(request,id):
-    if request.method == "GET":
-        return render(request,'doctor/edit.html')
-    elif request.method == "POST":
-        return False
+       
 
-def delete(request):
-    return False
+        username = result[0]["Email"]
+        name = result[0].pop("Name")
+        surname = result[0].pop("Surname")
+        password =   result[0].pop("password")
+        password_confirm =  result[0].pop("passwordconfirm")
+ 
+        logger.error(result[0])
+
+        query_dict = QueryDict('', mutable=True)
+        query_dict.update(result[0])
+
+        form = DoctorForm(query_dict or None)
+        if form.is_valid() and password == password_confirm:
+            user = User.objects.create_user(username=username,
+                                 email=username,
+                                 password=password,first_name=name,last_name=surname)
+            user.save()
+            forme = form.save(commit=False)
+            form.instance.User = user 
+            forme.save()
+            return HttpResponseRedirect("/Doctors/")
+        else:
+            return HttpResponseBadRequest(form.errors)
+         
+    context['form']= DoctorForm(None)
+    return render(request, "doctor/create.html", context)
+
+
+def edit(request,id): #not edited doctor
+
+    context ={}
+    obj = get_object_or_404(Doctor, ID = id)
+  
+    form = DoctorForm(request.POST or None, instance = obj) 
+  
+    result = [{}]
+    if request.method == "POST":
+        for item in str(request.body)[2:-1].split("&"):
+            key, val = item.split("=", 1)
+            if key in result[-1]:
+                result.append({})
+            result[-1][key] = urllib.parse.unquote(val)
+
+       
+        UserId = result[0].pop("UserId")
+        username = result[0]["Email"]
+        name = result[0].pop("Name")
+        surname = result[0].pop("Surname")
+        password =   result[0].pop("password")
+        password_confirm =  result[0].pop("passwordconfirm")
+ 
+        query_dict = QueryDict('', mutable=True)
+        query_dict.update(result[0])
+
+        form = DoctorForm(query_dict or None, instance = obj) 
+        if form.is_valid():
+            user = User.objects.get(id=UserId) 
+            if password != "" and password_confirm != "":
+                if password == password_confirm:
+                    user.set_password(password)
+                else:
+                    return HttpResponseBadRequest("Şifreler farklı")
+            user.first_name = name
+            user.last_name = surname
+            user.username = username
+            user.email = username
+
+            user.save()
+            form.save()
+            return HttpResponseRedirect("/Doctors/")
+        else:
+            return HttpResponseBadRequest(form.errors)
+         
+    context["form"] = form 
+    context["user"] = User.objects.get(id = obj.User_id)
+    return render(request, "doctor/edit.html", context) 
+
+  
+   
+
+def delete(request,id):
+    context ={}
+    if id == 1:
+        HttpResponseBadRequest('<h1>You are not delete special Doctor</h1>')
+    # fetch the object related to passed id
+    obj = get_object_or_404(Doctor, ID = id)
+ 
+ 
+    if request.method =="POST":
+        # delete object
+        obj.delete()
+        # after deleting redirect to 
+        # home page
+        return HttpResponseRedirect("/Doctors/")
+ 
+    return HttpResponseBadRequest('<h1>You are not authorized to view this page</h1>')
+
+

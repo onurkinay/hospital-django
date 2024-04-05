@@ -1,16 +1,17 @@
 {% extends "management_base.html" %}
+{{form}}
 
+{{user}}
 {% load static %}
 {% block title %} Doctors {% endblock %}
 {% block content %}
+<!--departmentn disable-->
+<form method="post">  <section id="ozel-sayfa">
+    {% csrf_token %}
 
-
-<form action="/Doctors/Edit" method="post">  <section id="ozel-sayfa">
-
-
-    <h2 style="margin-left: 13%;">Edit Account</h2>
+    <h2 style="margin-left: 13%;">Edit Doctor</h2>
     <input data-val="true" data-val-number="The field ID must be a number." data-val-required="ID alanı gereklidir." id="ID" name="ID" type="hidden" value="1">
-    <input id="UserId" name="UserId" type="hidden" value="5ba5c341-25ca-4fa1-9aae-3598f04fee2e">
+    <input id="UserId" name="UserId" type="hidden" value="{{user.id}}">
     
 
     <div class="container">
@@ -18,32 +19,28 @@
         <div class="kisisel-bilgiler">
             <ul>
                 <li>
-                    <span>Name:</span>    <input class="form-control text-box single-line" data-val="true" data-val-required="Name is required" id="Name" name="Name" type="text" value="Ahmet">
+                    <span>Name:</span>    <input class="form-control text-box single-line" data-val="true" data-val-required="Name is required" id="Name" name="Name" type="text" value="{{user.first_name}}">
                     <span class="field-validation-valid text-danger" data-valmsg-for="Name" data-valmsg-replace="true"></span>
                 </li>
                 <li>
-                    <span>Surname:</span>  <input class="form-control text-box single-line" data-val="true" data-val-required="Surname is required" id="Surname" name="Surname" type="text" value="Kaşka">
+                    <span>Surname:</span>  <input class="form-control text-box single-line" data-val="true" data-val-required="Surname is required" id="Surname" name="Surname" type="text" value="{{user.last_name}}">
                     <span class="field-validation-valid text-danger" data-valmsg-for="Surname" data-valmsg-replace="true"></span>
                 </li>
                 <li>
-                    <span>Date of Birth:</span>     <input class="form-control text-box single-line" id="dob" max="2024-04-04" name="dob" type="date" value="1991-10-10">
+                    <span>Date of Birth:</span>     <input class="form-control text-box single-line" id="dob" max="2024-04-04" name="DateOfBirth" type="date" value="{{form.DateOfBirth.value|date:"Y-m-d"}}">
                     <span class="field-validation-valid text-danger" data-valmsg-for="DOB" data-valmsg-replace="true"></span>
                 </li>
                 <li>
-                    <span>Mobile Number:</span>     <input class="form-control text-box single-line" data-val="true" data-val-required="Phone number is required" id="Phone" name="Phone" type="text" value="+5555555">
+                    <span>Mobile Number:</span>     <input class="form-control text-box single-line" data-val="true" data-val-required="Phone number is required" id="Phone" name="Phone" type="text" value="{{form.Phone.value}}">
                     <span class="field-validation-valid text-danger" data-valmsg-for="Phone" data-valmsg-replace="true"></span>
 
                 </li>
                 <li>
-                    <span>E-mail Address:</span>   <input class="form-control text-box single-line" data-val="true" data-val-regex="Email alanı &#39;^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$&#39; normal ifadesi ile eşleşmelidir." data-val-regex-pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$" data-val-required="Email alanı gereklidir." id="Email" name="Email" type="text" value="d1@hospital.com">
+                    <span>E-mail Address:</span>   <input class="form-control text-box single-line" data-val="true" data-val-regex="Email alanı &#39;^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$&#39; normal ifadesi ile eşleşmelidir." data-val-regex-pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$" data-val-required="Email alanı gereklidir." id="Email" name="Email" type="text" value="{{user.email}}">
                     <span class="field-validation-valid text-danger" data-valmsg-for="Email" data-valmsg-replace="true"></span>
                 </li>
                 <li>
-                    <span>Department: </span>    <select class="form-control" disabled="" id="CurDeptartmentID" name="CurDeptartmentID"><option selected="selected" value="1">General Surgery</option>
-<option value="2">Otorhinolaryngology</option>
-<option value="3">Thoracic Surgery</option>
-<option value="4">Gynaecology</option>
-</select>
+                    <span>Department: </span>   {{form.Department}}
                     <span class="field-validation-valid text-danger" data-valmsg-for="CurDeptartmentID" data-valmsg-replace="true"></span>
                 </li>
                 <li> <button>Send</button></li>
@@ -58,32 +55,31 @@
                 </li>
                 <li><span>Password Confirm:</span> <input type="password" name="passwordconfirm" value=""></li>
                 <li>
-                    <span>Gender</span><br><br>
-                    <input checked="checked" data-val="true" data-val-required="Gender alanı gereklidir." id="Gender" name="Gender" style="width:initial;" type="radio" value="True">  Male
-                    <br>  <input id="Gender" name="Gender" style="width:initial;" type="radio" value="False"> Female
+                    <span>Gender</span>
+                  {{form.Gender}}
                     <span class="field-validation-valid text-danger" data-valmsg-for="Gender" data-valmsg-replace="true"></span>
                 </li>
 
                 <li>
-                    <span>Languages:</span>    <input class="form-control text-box single-line" id="Languages" name="Languages" type="text" value="Turkish, English">
+                    <span>Languages:</span>    <input class="form-control text-box single-line" id="Languages" name="Languages" type="text" value="{{form.Languages.value}}">
                     <span class="field-validation-valid text-danger" data-valmsg-for="Languages" data-valmsg-replace="true"></span>
                 </li>
                 <li>
-                    <span>Specializations:</span>    <input class="form-control text-box single-line" id="Specializations" name="Specializations" type="text" value="good prescription writer">
+                    <span>Specializations:</span>    <input class="form-control text-box single-line" id="Specializations" name="Specializations" type="text" value="{{form.Specializations.value}}">
                     <span class="field-validation-valid text-danger" data-valmsg-for="Experience" data-valmsg-replace="true"></span>
                 </li>
                 <li>
-                    <span>Experience:</span>    <input class="form-control text-box single-line" id="Experience" name="Experience" type="text" value="5 years of being student">
+                    <span>Experience:</span>    <input class="form-control text-box single-line" id="Experience" name="Experience" type="text" value="{{form.Experience.value}}">
                     <span class="field-validation-valid text-danger" data-valmsg-for="Experience" data-valmsg-replace="true"></span>
                 </li>
 
                 <li>
                     <span>Salary:</span>
 
-                    <input class="form-control text-box single-line" data-val="true" data-val-number="The field Salary must be a number." data-val-required="Salary is required" disabled="" id="Salary" name="Salary" type="text" value="28004">
+                    <input class="form-control text-box single-line" data-val="true" data-val-number="The field Salary must be a number." data-val-required="Salary is required" disabled="" id="Salary" name="Salary" type="text" value="{{form.Salary.value}}">
 
                     <span class="field-validation-valid text-danger" data-valmsg-for="Salary" data-valmsg-replace="true"></span>
-                </li><!--roleadmin de düzenlenebilir. roledoctorda disabled olmalı-->
+                </li>
 
             </ul>
         </div>

@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.db import models
-
+from department.models import Department
 BLOOD_GROUPS = ( 
     ("1", "A Rh+"), 
     ("2", "B Rh+"), 
@@ -21,13 +21,12 @@ class Doctor(models.Model):
     User = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,blank=True, null=True)
     DateOfBirth = models.DateField()
     Gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
-    Blood_Group = models.CharField(max_length = 1,  choices = BLOOD_GROUPS, default = '1')
-    Address = models.TextField()
     Phone = models.CharField(max_length=11)
     Salary = models.IntegerField()
     Specializations = models.CharField(max_length=300)
     Experience = models.TextField()
     Languages = models.CharField(max_length=300)
+    Department = models.ForeignKey(Department, on_delete=models.SET_DEFAULT,default=1)
 
     class Meta:
         db_table = "doctor"
