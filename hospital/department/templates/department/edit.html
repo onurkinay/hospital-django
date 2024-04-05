@@ -1,32 +1,33 @@
 {% extends 'management_base.html' %}
-
+{{ form }}
 {% load static %}
 {% block title %}
   Edit Department
 {% endblock %}
 {% block content %}
   <form method="post">
+    {% csrf_token %}
     <section id="ozel-sayfa">
       <h2 style="margin-left: 13%;">Edit Department</h2>
-
+      {{ form.non_field_errors }}
       <div class="container" style="display:block">
         <div class="kisisel-bilgiler" style="width:initial">
           <ul>
-            <!--  <li>
-                    <span>Name:</span>    <input class="form-control text-box single-line" data-val="true" data-val-required="Department Name alanı gereklidir." id="Name" name="Name" type="text" value="">
-                    <span class="field-validation-valid text-danger" data-valmsg-for="Name" data-valmsg-replace="true"></span>
-                </li>
-                <li>
-                    <span>Price:</span>    <input class="form-control text-box single-line" data-val="true" data-val-number="The field Price Per Unit must be a number." data-val-required="Price Per Unit alanı gereklidir." id="PriceUnit" name="PriceUnit" type="text" value="">
-                    <span class="field-validation-valid text-danger" data-valmsg-for="PriceUnit" data-valmsg-replace="true"></span>
-                </li> -->
-            <!-- Security token by Django -->
-            {% csrf_token %}
-
-            <!-- form as paragraph -->
-            {{ form.as_p }}
+            {% for field in form %}
             <li>
-                <input type="submit" value="Update">
+                {{ field.errors }}
+                {{ field.label_tag }} 
+                
+                <input class="form-control text-box single-line" id="{{ field.id }}" name="{{ field.name }}" type="text" value="{{ field.value }}" />
+                 
+                {% if field.help_text %}
+                  <p class="help" id="{{ field.auto_id }}_helptext">{{ field.help_text|safe }}</p>
+                {% endif %}
+
+            </li>
+            {% endfor %}
+            <li>
+              <button type="submit">Send</button>
             </li>
           </ul>
         </div>

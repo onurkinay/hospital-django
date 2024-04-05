@@ -43,7 +43,8 @@ def edit(request,id):
 
 def delete(request,id):
     context ={}
- 
+    if id == 1:
+        HttpResponseBadRequest('<h1>You are not delete special department</h1>')
     # fetch the object related to passed id
     obj = get_object_or_404(Department, ID = id)
  
