@@ -16,7 +16,7 @@ def home(request):
 
 def details(request,id): 
     queryset = Prescription.objects.filter(ID=id).values()
-    return JsonResponse({"Prescription": list(queryset)})
+    return JsonResponse(list(queryset),safe=False)
 
 def create(request, id):
     context ={}
@@ -32,7 +32,6 @@ def edit(request,id):
     context ={}
   
     obj = get_object_or_404(Prescription, ID = id)
-  
     form = PrescriptionForm(request.POST or None, instance = obj)
   
     if form.is_valid():
@@ -44,7 +43,6 @@ def edit(request,id):
 
 def delete(request):
     obj = get_object_or_404(Prescription, ID = id)
-  
     if request.method =="POST": 
         obj.delete() 
         return HttpResponseRedirect("/Prescriptions/")

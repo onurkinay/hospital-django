@@ -50,22 +50,19 @@
             <li class="patEmail">
               <span>E-Mail Address:</span>
             </li>
-            <li class="patGender">
-              <span>Gender:</span>
-            </li>
           </ul>
         </div>
         <div class="hesap-bilgileri">
           <h3>-</h3>
           <ul>
+            <li class="patGender">
+              <span>Gender:</span>
+            </li>
             <li class="patBlood">
               <span>Blood Group:</span>
             </li>
             <li class="patAddress">
               <span>Address:</span>
-            </li>
-            <li class="patCity">
-              <span>City:</span>
             </li>
           </ul>
         </div>
@@ -74,12 +71,6 @@
   </div>
 
   <script>
-    function gettoken() {
-      var token = '<input name="__RequestVerificationToken" type="hidden" value="c31vgnq7PKWsB9UipaBhH_ihmC0ZbzMHo30kMUBNjPorUM4Q3Emrw23PC557dInorSRAE5f1B7wQH9RcR--PwdhlqADPzfNufGheVdfi_sGFoOncJUVW5P9I-oo6DCbK3jnWq3bs2EJuFVuEwTbAiQ2" />'
-      token = $(token).val()
-      return token
-    }
-    
     $('.delete').click(function (event) {
       //linke click eventi kazandırma
       event.preventDefault()
@@ -102,15 +93,14 @@
       event.preventDefault()
       this.blur()
       $.get(this.href, function (json) {
-        const patient = JSON.parse(json)
+        const patient = json[0]
         $('li.patNameSurname').html('<span>Name Surname:</span> ' + patient.Name + ' ' + patient.Surname)
-        $('li.patDoB').html('<span>Date of Birth:</span> ' + new Date(patient.DOB).toLocaleDateString())
+        $('li.patDoB').html('<span>Date of Birth:</span> ' + new Date(patient.DateOfBirth).toLocaleDateString())
         $('li.patNumber').html('<span>Phone Number:</span> ' + patient.Phone)
         $('li.patEmail').html('<span>Email:</span> ' + patient.Email)
         $('li.patGender').html('<span>Gender:</span> ' + (patient.Gender ? 'Male' : 'Female'))
         $('li.patBlood').html('<span>Blood Group:</span> ' + patient.Blood_Group)
         $('li.patAddress').html('<span>Address:</span> ' + patient.Address)
-        $('li.patCity').html('<span>City:</span> ' + patient.City)
     
         $('#ex1').modal()
       })

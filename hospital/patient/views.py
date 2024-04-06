@@ -20,9 +20,8 @@ def home(request):
 
 def details(request,id): #param id, json return
     queryset = Patient.objects.filter(ID=id).values()
-    return JsonResponse({"Doctor": list(queryset)})
-
-
+    return JsonResponse(list(queryset),safe=False)
+ 
 def edit(request,id):
     context ={}
     obj = get_object_or_404(Patient, ID = id)

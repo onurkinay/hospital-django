@@ -12,3 +12,5 @@ class Appointment(models.Model):
 
     class Meta:
         db_table = "appointment"
+    def __str__(self):
+        return str(str(self.AppointmentDate) + " "+ self.DoctorID.User.first_name)

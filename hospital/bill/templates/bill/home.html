@@ -9,24 +9,28 @@
     <div class="container">
       <h2>Bills</h2>
       <ul class="responsive-table">
-        <li class="table-header">
-          <div class="col col-1">Appointment Date</div>
-          <div class="col col-1">Name</div>
-          <div class="col col-1">Amount</div>
-          <div class="col col-1">Is Paid?</div>
-          <div class="col col-4">Actions</div>
-        </li>
-        {% for data in dataset %}
-          <li class="table-row">
-            <div class="col col-1" data-label="Job Id">{{ data.IssuedDate }}</div>
-            <div class="col col-1">{{ data.Appointment.PatientID.User.first_name }}</div>
-            <div class="col col-1">100</div>
-            <div class="col col-2" data-label="Operation">{{ data.IsPaid }}</div>
-            <div class="col col-3" data-label="Operation">
-              <a href="/Bills/Edit/{{ data.ID }}">Edit</a> | <a class="deleteBill" href="/Bills/Delete/{{ data.ID }}">Delete</a>
-            </div>
+        {% if dataset.count == 0 %}
+          <p>No record</p>
+        {% else %}
+          <li class="table-header">
+            <div class="col col-1">Appointment Date</div>
+            <div class="col col-1">Name</div>
+            <div class="col col-1">Amount</div>
+            <div class="col col-1">Is Paid?</div>
+            <div class="col col-4">Actions</div>
           </li>
-        {% endfor %}
+          {% for data in dataset %}
+            <li class="table-row">
+              <div class="col col-1" data-label="Job Id">{{ data.IssuedDate }}</div>
+              <div class="col col-1">{{ data.Appointment.PatientID.User.first_name }}</div>
+              <div class="col col-1">100</div>
+              <div class="col col-2" data-label="Operation">{{ data.IsPaid }}</div>
+              <div class="col col-3" data-label="Operation">
+                <a href="/Bills/Edit/{{ data.ID }}">Edit</a> | <a class="deleteBill" href="/Bills/Delete/{{ data.ID }}">Delete</a>
+              </div>
+            </li>
+          {% endfor %}
+        {% endif %}
       </ul>
     </div>
   </section>

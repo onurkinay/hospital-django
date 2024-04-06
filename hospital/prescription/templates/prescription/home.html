@@ -1,103 +1,92 @@
-{% extends "management_base.html" %}
+{% extends 'management_base.html' %}
 
 {% load static %}
-{% block title %} Prescription {% endblock %}
+{% block title %}
+  Prescription
+{% endblock %}
 {% block content %}
-
-
-<section id="randevular">
-
+  <section id="randevular">
     <div class="container">
-        <h2>Prescription</h2> 
-        <ul class="responsive-table">
+      <h2>Prescription</h2>
+      <ul class="responsive-table">
+        <li class="table-header">
+          <div class="col col-1">Date/Time</div>
+          <!-- Patient side -->
+          <div class="col col-3">Doctor Name</div>
+          <!-- Doctor side -->
+          <div class="col col-3">Patient Name</div>
+          <div class="col col-6">Actions</div>
+        </li>
+        {% if dataset.count == 0 %}
+          <p>No record</p>
+        {% else %}
+          {% for data in dataset %}
+            <li class="table-row">
+              <div class="col col-1" data-label="Date">{{ data.Appointment.AppointmentDate }}</div>
 
+              <div class="col col-3" data-label="Doctor Name">{{ data.Appointment.DoctorID.User.first_name }} {{ data.Appointment.DoctorID.User.last_name }}</div>
+              <div class="col col-3" data-label="Patient Name">{{ data.Appointment.PatientID.User.first_name }} {{ data.Appointment.PatientID.User.last_name }}</div>
 
-                <li class="table-header">
-                    <div class="col col-1">Date/Time</div>
-                        <div class="col col-3">Doctor Name</div>
-                    <div class="col col-6">Actions</div>
-                </li>
-                            <li class="table-row">
-                    <div class="col col-1" data-label="Date">
-                        26.01.2024 13:49:00
-                    </div>
-
-
-<div class="col col-3" data-label="Doctor Name">Ahmet</div>
-
-
-                <div class="col col-6" data-label="Change Appointment Operation">
-
-<a class="getDetails" href="https://localhost:44328/Prescriptions/Details/1">Details</a>                </div>
-                </li>
-        </ul>
+              <div class="col col-6" data-label="Change Appointment Operation">
+                <a class="getDetails" href="/Prescriptions/Details/{{ data.ID }}">Details</a>
+              </div>
+            </li>
+          {% endfor %}
+        {% endif %}
+      </ul>
     </div>
+  </section>
 
-</section>
-
-
-
-
-<div id="ex1" class="modal" style="max-width:auto">
+  <div id="ex1" class="modal" style="max-width:auto">
     <section id="ozel-sayfa" style="padding:0;margin-bottom:0">
-        <div class="container" style="max-width:initial;display:block">
-            <div class="hesap-bilgileri" style="width:initial">
-                <h3>Prescription Details</h3>
-                <ul>
-                    <li class="medicinePrescription"> </li>
-                    <li class="remarkPrescription"></li>
-                    <li class="advicePrescription"></li>
-                </ul>
-            </div>
+      <div class="container" style="max-width:initial;display:block">
+        <div class="hesap-bilgileri" style="width:initial">
+          <h3>Prescription Details</h3>
+          <ul>
+            <li class="medicinePrescription"></li>
+            <li class="remarkPrescription"></li>
+            <li class="advicePrescription"></li>
+          </ul>
         </div>
+      </div>
     </section>
-</div>
+  </div>
 
-<script>
-     function gettoken() {
-        var token = '<input name="__RequestVerificationToken" type="hidden" value="kO0ZbIwL41wC1o-Mt1jv7VWUyy326ZBTWkCOlNAFPUY9XVoVdLILjoDrdN_nwPC5wUdF5syf4nErC31ZdtkNoG5NrJJqJn2BIGTolJZFsa3yULGASc1ozi1Ehn4pxwLZf477TiPXy0tKAEgTjV3EcA2" />';
-        token = $(token).val();
-        return token;
-    }
+  <script>
+    $('.deletePre').click(function (event) {
+      //linke click eventi kazandırma
+      event.preventDefault()
+      if (confirm('Do you sure delete this prescription')) {
+        $.ajax({
+          url: this.href,
+          data: {
+            csrfmiddlewaretoken: '{{ csrf_token }}'
+          },
+          type: 'POST',
+          success: function (result) {
+            location.reload()
+          }
+        })
+      }
+    })
+  </script>
 
-
-    $('.deletePre').click(function (event) {//linke click eventi kazandırma
-        event.preventDefault();
-        if (confirm("Do you sure delete this prescription")) {
-            $.ajax({
-                url: this.href,
-                data: {
-                    __RequestVerificationToken: gettoken()
-                },
-                type: 'POST',
-                success: function (result) {
-                    location.reload();
-                }
-            });
-        }
-
-    });
-</script>
-
-<script>
+  <script>
     // Hasta tarafı için reçete detaylarını gösterme
     $('.getDetails').click(function (event) {
-        event.preventDefault();
-        this.blur();
-        $.get(this.href, function (html) {
-            const prescription = JSON.parse(html); // JSON bilgisi gelir
-            // İlaç adını, reçetenin notunu ve tavsiyesini ayarlayın
-            $('li.medicinePrescription').html('<span>Medicine:</span> ' + prescription.Medicinde);
-            $('li.remarkPrescription').html('<span>Remark:</span> ' + prescription.Remark);
-            $('li.advicePrescription').html('<span>Advice:</span> ' + prescription.Advice);
-
-            // Modal penceresini göster
-            $('#ex1').modal();
-        });
-    });
+      event.preventDefault()
+      this.blur()
+      $.get(this.href, function (html) {
+        const prescription = html[0] // JSON bilgisi gelir
+        // İlaç adını, reçetenin notunu ve tavsiyesini ayarlayın
+        $('li.medicinePrescription').html('<span>Medicine:</span> ' + prescription.Medicinde)
+        $('li.remarkPrescription').html('<span>Remark:</span> ' + prescription.Remark)
+        $('li.advicePrescription').html('<span>Advice:</span> ' + prescription.Advice)
+    
+        // Modal penceresini göster
+        $('#ex1').modal()
+      })
+    })
     // Hasta tarafı
-</script>
-
-
-
-{%endblock%}
+  </script>
+{% endblock %}

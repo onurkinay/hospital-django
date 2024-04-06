@@ -1,4 +1,4 @@
-from django.http import JsonResponse, HttpResponseBadRequest
+from django.http import JsonResponse, HttpResponseBadRequest,HttpResponse
 from django.shortcuts import (get_object_or_404,
                               render,
                               HttpResponseRedirect)
@@ -14,7 +14,7 @@ def home(request):
 
 def details(request,id): 
     queryset = Department.objects.filter(ID=id).values()
-    return JsonResponse({"department": list(queryset)})
+    return JsonResponse(list(queryset),safe=False)
 
 def create(request):
     context ={}
@@ -47,8 +47,7 @@ def delete(request,id):
         HttpResponseBadRequest('<h1>You are not delete special department</h1>')
     # fetch the object related to passed id
     obj = get_object_or_404(Department, ID = id)
- 
- 
+  
     if request.method =="POST":
         # delete object
         obj.delete()
@@ -57,5 +56,9 @@ def delete(request,id):
         return HttpResponseRedirect("/Departments/")
  
     return HttpResponseBadRequest('<h1>You are not authorized to view this page</h1>')
+
+def getDeptName(request,id):
+    obj = get_object_or_404(Department, ID = id)
+    return HttpResponse(obj.Name)
 
 

@@ -17,7 +17,7 @@ def home(request):
 
 def details(request,id): #param id
     queryset = Appointment.objects.filter(ID=id).values()
-    return JsonResponse({"Appointment": list(queryset)})
+    return JsonResponse(list(queryset),safe=False)
 
 def create(request):
    
@@ -27,6 +27,7 @@ def create(request):
  
     # add the dictionary during initialization
     form = AppointmentForm(request.POST or None)
+    
     if form.is_valid():
         form.save()
         return HttpResponseRedirect("/Appointments/")

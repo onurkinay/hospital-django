@@ -1,31 +1,31 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{% block title %} {%endblock%} | Hospital</title>
-        <link rel="stylesheet" href="{% static 'css/page-style.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      {% block title %}
 
-        <script type="text/javascript" src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
-       
-</head>
+      {% endblock %}| Hospital
+    </title>
+    <link rel="stylesheet" href="{% static 'css/page-style.css' %}" />
 
-<body>
-   
-    {% include "headers/patient.html" %}
-    
-    {% block content %}{% endblock %}
+    <script type="text/javascript" src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+  </head>
+
+  <body>
+    {% include 'headers/patient.html' %} <!-- role based header -->
+
+    {% block content %}
+
+    {% endblock %}
 
     <footer class="footer">
-        <p>&copy;Fsmvu 2023 Web Design Project</p>
+      <p>&copy;Fsmvu 2023 Web Design Project</p>
     </footer>
-
-
-</body>
-
+  </body>
 </html>

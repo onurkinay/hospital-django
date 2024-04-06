@@ -1,25 +1,36 @@
 {% extends 'management_base.html' %}
-
+{{ form }}
 {% load static %}
 {% block title %}
-  Appointment
+  Create Appointment
 {% endblock %}
 {% block content %}
-  <section id="randevu-al-container">
-    <h2 class="container-header">Create Appointment</h2>
-    <div class="randevu-al">
-      <form method="post">
-        <!-- Security token -->
-        {% csrf_token %}
+  <form method="post">
+    {% csrf_token %}
+    <section id="ozel-sayfa">
+      <h2 style="margin-left: 13%;">Create Appointment</h2>
+      {{ form.non_field_errors }}
+      <div class="container" style="display:block">
+        <div class="kisisel-bilgiler" style="width:initial">
+          <ul>
+            {% for field in form %}
+              <li>
+                {{ field.errors }}
+                {{ field.label_tag }}
 
-        <!-- Using the formset -->
-        {{ form.as_p }}
-        <input type="hidden" name="PatientID" value="1" />
+                {{ field }}
 
-        <div class="form-group">
-          <input id="btn" type="submit" value="Create Appointment" />
+                {% if field.help_text %}
+                  <p class="help" id="{{ field.auto_id }}_helptext">{{ field.help_text|safe }}</p>
+                {% endif %}
+              </li>
+            {% endfor %}
+            <li>
+              <button type="submit">Send</button>
+            </li>
+          </ul>
         </div>
-      </form>
-    </div>
-  </section>
+      </div>
+    </section>
+  </form>
 {% endblock %}

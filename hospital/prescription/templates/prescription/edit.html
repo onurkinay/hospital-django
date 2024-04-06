@@ -1,49 +1,36 @@
-{% extends "management_base.html" %}
-
+{% extends 'management_base.html' %}
+{{ form }}
 {% load static %}
-{% block title %} Prescription {% endblock %}
+{% block title %}
+  Edit Prescription
+{% endblock %}
 {% block content %}
+  <form method="post">
+    {% csrf_token %}
+    <section id="ozel-sayfa">
+      <h2 style="margin-left: 13%;">Edit Prescription</h2>
+      {{ form.non_field_errors }}
+      <div class="container" style="display:block">
+        <div class="kisisel-bilgiler" style="width:initial">
+          <ul>
+            {% for field in form %}
+              <li>
+                {{ field.errors }}
+                {{ field.label_tag }}
 
-<section id="randevu-al-container">
-    <h2 class="container-header">Create Prescription</h2>
-    <div class="randevu-al">
-<form action="https://localhost:44328/Prescriptions/Create/1" method="post"><input name="__RequestVerificationToken" type="hidden" value="Z0amHysroiRoNEvrupUmXqmrxCcgY-pAH2ltPiW2j7fwQa42HkCVe5Ys--zyUf0ZMMDSmc9KwszqpUe0240wYkiCB2RqWRCKD4G_PPpOwedIle1vkL1WO83PZtefE49Rk63c16V-ZHEhx3Ht_Cnp9w2">            <div class="form-group">
-                <label for="randevu-sebebi"> Advice</label>
-                <input class="text-box single-line" id="Advice" name="Advice" type="text" value="">
-                <span class="field-validation-valid text-danger" data-valmsg-for="Advice" data-valmsg-replace="true"></span>
-            </div>
-            <div class="form-group">
-                <label for="randevu-sebebi"> Medicinde</label>
-                <input class="text-box single-line" id="Medicinde" name="Medicinde" type="text" value="">
-                <span class="field-validation-valid text-danger" data-valmsg-for="Medicinde" data-valmsg-replace="true"></span>
-            </div>
-            <div class="form-group">
-                <label for="randevu-sebebi"> Remark</label>
-                <input class="text-box single-line" id="Remark" name="Remark" type="text" value="">
-                <span class="field-validation-valid text-danger" data-valmsg-for="Remark" data-valmsg-replace="true"></span>
-            </div>
-            <div class="form-group">
-                <label for="randevu-sebebi">
-                   Appointment   </label>
-                <select class="form-control" disabled="disabled" id="Appointment_ID" name="Appointment_ID"><option value="1">gene kontrol</option>
-</select>
-                <span class="field-validation-valid text-danger" data-valmsg-for="Advice" data-valmsg-replace="true"></span>
-            </div>
-            <div class="form-group">
-                <input id="btn" type="submit" value="Create Precription">
-            </div>
-</form>    </div>
-</section>
+                {{ field }}
 
-<script>
-    $('form').submit(function (e) {
-        $(':disabled').each(function (e) {
-            $(this).removeAttr('disabled');
-        })
-    });
-</script>
-
-
-
-
-{%endblock%}
+                {% if field.help_text %}
+                  <p class="help" id="{{ field.auto_id }}_helptext">{{ field.help_text|safe }}</p>
+                {% endif %}
+              </li>
+            {% endfor %}
+            <li>
+              <button type="submit">Send</button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </form>
+{% endblock %}

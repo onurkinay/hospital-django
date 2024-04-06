@@ -1,4 +1,4 @@
-from django.http import JsonResponse, HttpResponseBadRequest
+from django.http import JsonResponse, HttpResponseBadRequest,HttpResponse
 from django.shortcuts import (get_object_or_404,
                               render,
                               HttpResponseRedirect)
@@ -19,7 +19,7 @@ def home(request):
 
 def details(request,id): 
     queryset = Doctor.objects.filter(ID=id).values()
-    return JsonResponse({"Doctor": list(queryset)})
+    return JsonResponse(list(queryset),safe=False)
 
 def create(request):
     context ={}
@@ -32,9 +32,7 @@ def create(request):
             if key in result[-1]:
                 result.append({})
             result[-1][key] = urllib.parse.unquote(val)
-
-       
-
+ 
         username = result[0]["Email"]
         name = result[0].pop("Name")
         surname = result[0].pop("Surname")
@@ -117,8 +115,7 @@ def edit(request,id):
 
 def delete(request,id):
     obj = get_object_or_404(Doctor, ID = id)
- 
- 
+  
     if request.method =="POST":
         # delete object
         obj.delete()
@@ -127,5 +124,10 @@ def delete(request,id):
         return HttpResponseRedirect("/Doctors/")
  
     return HttpResponseBadRequest('<h1>You are not authorized to view this page</h1>')
+
+def changeSalary(request, id):#autoration if 
+    if request.method =="POST":
+        Doctor.objects.filter(ID=id).update(Salary=request.POST["newSalary"])
+    return HttpResponse("successfull")
 
 

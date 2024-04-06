@@ -1,7 +1,8 @@
 from django import forms
 from .models import Appointment
  
-  
+#Giriş yapan hastanın IDsi varsayılan olarak seçilmeli ve değiştirilmesine izin verilmemeli
+
 class AppointmentForm(forms.ModelForm):
   
     class Meta: 
@@ -22,4 +23,5 @@ class AppointmentForm(forms.ModelForm):
                        'placeholder': 'Select a date',
                        'type': 'datetime-local'  
                       }),
+            'PatientID': forms.HiddenInput(attrs={'value':'1'})
         }

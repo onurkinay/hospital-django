@@ -13,23 +13,27 @@
       </div>
       <div class="bosluk"></div>
       <ul class="responsive-table">
-        <li class="table-header">
-          <div class="col col-1">Department Name</div>
-          <div class="col col-4">Actions</div>
-        </li>
-        {% for data in dataset %}
-          <li class="table-row">
-            <div class="col col-1" data-label="Job Id">{{ data.Name }}</div>
-
-            <div class="col col-4" data-label="Operation">
-              <a href="/Departments/Edit/{{ data.ID }}">Edit</a> |{% if data.ID != 1 %}
-                <a class="delete" href="/Departments/Delete/{{ data.ID }}/">Delete</a>
-              {% else %}
-                Can't be deleted
-              {% endif %}
-            </div>
+        {% if dataset.count == 0 %}
+          <p>No record</p>
+        {% else %}
+          <li class="table-header">
+            <div class="col col-1">Department Name</div>
+            <div class="col col-4">Actions</div>
           </li>
-        {% endfor %}
+          {% for data in dataset %}
+            <li class="table-row">
+              <div class="col col-1" data-label="Job Id">{{ data.Name }}</div>
+
+              <div class="col col-4" data-label="Operation">
+                <a href="/Departments/Edit/{{ data.ID }}">Edit</a> |{% if data.ID != 1 %}
+                  <a class="delete" href="/Departments/Delete/{{ data.ID }}/">Delete</a>
+                {% else %}
+                  Can't be deleted
+                {% endif %}
+              </div>
+            </li>
+          {% endfor %}
+        {% endif %}
       </ul>
     </div>
   </section>

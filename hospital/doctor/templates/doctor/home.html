@@ -12,26 +12,41 @@
         <a class="addButtonInside" href="/Doctors/Create">Add Doctor</a>
       </div>
       <div class="bosluk"></div>
-      <ul class="responsive-table">
-        <li class="table-header">
-          <div class="col col-1">Name</div>
-          <div class="col col-2">Department Name</div>
-          <div class="col col-3">Specializations</div>
-          <div class="col col-4">Actions</div>
-        </li>
-        {% for data in dataset %}
-          <li class="table-row">
-            <div class="col col-1 nameSurname" data-label="Job Id">{{ data.User.first_name }} {{ data.User.last_name }}</div>
-            <div class="col col-2" data-label="Doctor Name">{{ data.Department.Name }}</div>
-            <div class="col col-3">{{ data.Specializations }}</div>
-            <div class="col col-4" data-label="Operation">
-              <a href="/Doctors/Edit/{{ data.ID }}">Edit</a> |
-              <a class="getDetails" href="/Doctors/Details/{{data.ID}}">Details</a>
-              | <a class="delete" href="/Doctors/Delete/{{ data.ID }}">Delete</a>
-            </div>
+
+      {% if dataset.count == 0 %}
+        <p>No record</p>
+      {% else %}
+        <ul class="responsive-table">
+          <li class="table-header">
+            <div class="col col-1">Name</div>
+            <div class="col col-2">Department Name</div>
+
+            <!-- Admin tarafı -->
+            <div class="col col-3">Specializations</div>
+
+            <!-- Accountant tarafı -->
+            <div class="col col-3">Salary</div>
+
+            <div class="col col-4">Actions</div>
           </li>
-        {% endfor %}
-      </ul>
+          {% for data in dataset %}
+            <li class="table-row">
+              <div class="col col-1 nameSurname" data-label="Job Id">{{ data.User.first_name }} {{ data.User.last_name }}</div>
+              <div class="col col-2" data-label="Doctor Name">{{ data.Department.Name }}</div>
+              <div class="col col-3">{{ data.Specializations }}</div>
+              <div class="col col-3">{{ data.Salary }}</div>
+              <div class="col col-4" data-label="Operation">
+                <a href="/Doctors/Edit/{{ data.ID }}">Edit</a> |
+                <a class="getDetails" href="/Doctors/Details/{{ data.ID }}/">Details</a>
+
+                |<a class="changeSalary" href="/Doctors/ChangeSalary/{{ data.ID }}/">Change Salary</a>
+
+                | <a class="delete" href="/Doctors/Delete/{{ data.ID }}/">Delete</a>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
     </div>
   </section>
 
@@ -133,9 +148,9 @@
       event.preventDefault()
       this.blur()
       $.get(this.href, function (json) {
-        const doctor = JSON.parse(json)
+        const doctor = json[0]
         $('li.docNameSurname').html('<span>Name Surname:</span> ' + doctor.Name + ' ' + doctor.Surname)
-        $('li.docDoB').html('<span>Date of Birth:</span> ' + new Date(doctor.DOB).toLocaleDateString())
+        $('li.docDoB').html('<span>Date of Birth:</span> ' + new Date(doctor.DateOfBirth).toLocaleDateString())
         $('li.docNumber').html('<span>Phone Number:</span> ' + doctor.Phone)
         $('li.docEmail').html('<span>Email:</span> ' + doctor.Email)
         $('li.docGender').html('<span>Gender:</span> ' + (doctor.Gender ? 'Male' : 'Female'))
@@ -143,7 +158,7 @@
         $('li.docSpecializations').html('<span>Specializations:</span> ' + doctor.Specializations)
         $('li.docLangs').html('<span>Languages:</span> ' + doctor.Languages)
         $('li.docSalary').html('<span>Salary:</span> ' + doctor.Salary)
-        $.get('/Departments/getDeptName/' + doctor.CurDeptartmentID, function (department) {
+        $.get('/Departments/getDeptName/' + doctor.Department_id, function (department) {
           $('li.docDept').html('<span>Department:</span> ' + department)
           $('#ex1').modal()
         })

@@ -5,39 +5,64 @@
   Edit Appointment
 {% endblock %}
 {% block content %}
-  <section id="randevu-al-container">
-    <h2 class="container-header">Edit Appointment</h2>
-    <div class="randevu-al">
-      <form method="post">
-        <div class="form-group">
+  <form method="post">
+    {% csrf_token %}
+    <section id="ozel-sayfa">
+      <h2 style="margin-left: 13%;">Create Appointment</h2>
+
+      {{ form.non_field_errors }}
+      <div class="container" style="display:block">
+        <div class="kisisel-bilgiler" style="width:initial">
           <!-- DOKTORUN GÖRECEĞİ KISIM -->
-          <label for="doktor-id">Patient:</label>
-          <label for="Patient_One">Patient One</label>
-          <span class="field-validation-valid text-danger" data-valmsg-for="Patient_ID" data-valmsg-replace="true"></span>
-          <a href="/Patients/Details/1" class="getDetails">Get Details</a>
-        </div>
+          <div class="form-group">
+            <label for="doktor-id">Patient:</label>
+            <label for="Patient_One">Patient One</label>
+            <a href="/Patients/Details/1" class="getDetails">Get Details</a>
+          </div>
+          <!-- HASTANIN GÖRECEĞİ KISIM -->
+          <div class="form-group">
+            <label for="patient-id">Doctor:</label>
+            <label for="Patient_One">Doctor One</label>
+          </div>
+          <ul>
+            {% for field in form %}
+              <li>
+                {{ field.errors }}
+                {{ field.label_tag }}
 
-        <!-- Security token -->
-        {% csrf_token %}
+                {{ field }}
 
-        <!-- Using the formset -->
-        {{ form.as_p }}
-        <div class="form-group">
-          <input id="btn" type="submit" value="Edit Appointment" />
+                {% if field.help_text %}
+                  <p class="help" id="{{ field.auto_id }}_helptext">{{ field.help_text|safe }}</p>
+                {% endif %}
+              </li>
+            {% endfor %}
+            <li>
+              <button type="submit">Send</button>
+            </li>
+          </ul>
         </div>
-      </form>
-    </div>
-  </section>
+      </div>
+    </section>
+  </form>
 
   <div id="ex1" class="modal">
     <section id="ozel-sayfa" style="padding:0;margin-bottom:0">
       <div class="container" style="max-width:initial">
-        <!-- role based olarak değişmeli -->
+        <!-- doctor -->
         <div class="kisisel-bilgiler" style="width:100%">
           <h3>Patient</h3>
           <ul>
             <li class="patientNameSurname"></li>
             <li class="patientBlood"></li>
+          </ul>
+        </div>
+        <!-- patient -->
+        <div class="kisisel-bilgiler">
+          <h3>Doctor</h3>
+          <ul>
+            <li class="doctorNameSurname"></li>
+            <li class="doctorDept"></li>
           </ul>
         </div>
       </div>
@@ -46,7 +71,7 @@
 
   <script>
     $('.getDetails').click(function (event) {
-      //linke click eventi kazandırma
+      //doctor
       event.preventDefault()
       this.blur()
       $.get(this.href, function (html) {

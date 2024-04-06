@@ -23,4 +23,4 @@ class Doctor(models.Model):
     class Meta:
         db_table = "doctor"
     def __str__(self):
-        return str(self.User.first_name+" "+self.User.last_name)
+        return str(self.User.first_name+" "+self.User.last_name + " - "+ self.Department.Name)

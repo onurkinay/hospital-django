@@ -8,29 +8,38 @@
   <section id="randevular">
     <div class="container">
       <h2 style="display:inline">Appointments</h2>
+      <!-- patient role -->
       <div class="addButton">
         <a class="addButtonInside" href="/Appointments/Create">Add Appointment</a>
       </div>
+      <!-- !patient role -->
       <div class="bosluk"></div>
       <ul class="responsive-table">
-        <li class="table-header">
-          <div class="col col-1">Date/Time</div>
-          <div class="col col-3">Doctor Name</div>
-          <div class="col col-6">Actions</div>
-        </li>
-
-        {% for data in dataset %}
-          <li class="table-row">
-            <div class="col col-1" data-label="Date">{{ data.AppointmentDate }}</div>
-            <div class="col col-3" data-label="Doctor Name">{{ data.DoctorID.User.first_name }} {{ data.DoctorID.User.last_name }}</div>
-
-            <div class="col col-6" data-label="Change Appointment Operation">
-              <a href="/Appointments/Edit/{{ data.ID }}">Edit</a> |
-              <a class="getDetails" href="/Appointments/Details/{{ data.ID }}/">Details</a> |
-              <a class="deleteApp" href="/Appointments/Delete/{{ data.ID }}/">Delete</a>
-            </div>
+        {% if dataset.count == 0 %}
+          <p>No record</p>
+        {% else %}
+          <li class="table-header">
+            <div class="col col-1">Date/Time</div>
+            <div class="col col-3">Doctor Name</div>
+            <!-- Patient kısmı -->
+            <div class="col col-3">Patient Name</div>
+            <!-- Patient kısmı -->
+            <div class="col col-6">Actions</div>
           </li>
-        {% endfor %}
+
+          {% for data in dataset %}
+            <li class="table-row">
+              <div class="col col-1" data-label="Date">{{ data.AppointmentDate }}</div>
+              <div class="col col-3" data-label="Doctor Name">{{ data.DoctorID.User.first_name }} {{ data.DoctorID.User.last_name }}</div>
+
+              <div class="col col-6" data-label="Change Appointment Operation">
+                <a href="/Appointments/Edit/{{ data.ID }}">Edit</a> |
+                <a class="getDetails" href="/Appointments/Details/{{ data.ID }}/">Details</a> |
+                <a class="deleteApp" href="/Appointments/Delete/{{ data.ID }}/">Delete</a>
+              </div>
+            </li>
+          {% endfor %}
+        {% endif %}
       </ul>
     </div>
   </section>
@@ -45,7 +54,7 @@
             <li class="descApp"></li>
           </ul>
         </div>
-        <!-- role based olarak değişmeli -->
+        <!-- hasta -->
         <div class="kisisel-bilgiler">
           <h3>Doctor</h3>
           <ul>
@@ -53,6 +62,17 @@
             <li class="doctorDept"></li>
           </ul>
         </div>
+        <!-- !hasta -->
+
+        <!-- doctor -->
+        <div class="kisisel-bilgiler">
+          <h3>Patient</h3>
+          <ul>
+            <li class="patientNameSurname"></li>
+            <li class="patientBlood"></li>
+          </ul>
+        </div>
+        <!-- !doctor -->
       </div>
     </section>
   </div>
@@ -72,17 +92,16 @@
     })
   </script>
   <script>
-    //hasta tarafı
     $('.getDetails').click(function (event) {
       //linke click eventi kazandırma
       event.preventDefault()
       this.blur()
       $.get(this.href, function (html) {
-        const appointment = JSON.parse(html) //json bilgisi gelir
+        const appointment = html[0] //json bilgisi gelir
         $('li.dateApp').html('<span>Date:</span> ' + new Date(appointment.AppointmentDate).toLocaleString())
         $('li.descApp').html('<span>Description:</span> ' + appointment.Description)
-        $.get('/Doctors/Details/' + appointment.Doctor_ID, function (doctorJson) {
-          const doctor = JSON.parse(doctorJson)
+        $.get('/Doctors/Details/' + appointment.DoctorID_id, function (doctorJson) {
+          const doctor = doctorJson[0]
           $('li.doctorNameSurname').html('<span>Name Surname:</span> ' + doctor.Name + ' ' + doctor.Surname)
           $.get('/Departments/getDeptName/' + doctor.CurDeptartmentID, function (department) {
             $('li.doctorDept').html('<span>Department:</span> ' + department)
@@ -91,6 +110,27 @@
         })
       })
     })
-    //hasta tarafı
+    //!hasta tarafı
+  </script>
+
+  <script>
+    //doktor
+    $('.getDetails').click(function (event) {
+      //linke click eventi kazandırma
+      event.preventDefault()
+      this.blur()
+      $.get(this.href, function (html) {
+        const appointment = html[0]
+        //json bilgisi gelir
+        $('li.dateApp').html('<span>Date:</span> ' + new Date(appointment.AppointmentDate).toLocaleString())
+        $('li.descApp').html('<span>Description:</span> ' + appointment.Description)
+        $.get('/Patients/Details/' + appointment.PatientID_id, function (patientJson) {
+          const patient = patientJson[0]
+          $('li.patientNameSurname').html('<span>Name Surname:</span> ' + patient.Name + ' ' + patient.Surname)
+          $('li.patientBlood').html('<span>Blood Group:</span> ' + patient.Blood_Group)
+          $('#ex1').modal()
+        })
+      })
+    })
   </script>
 {% endblock %}
