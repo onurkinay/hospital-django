@@ -19,8 +19,7 @@ def is_member(user, listgroup):
 @user_passes_test(lambda u: is_member(u,["Admin","Patient","Doctor"]))
 def home(request):
     context ={} 
-    context["dataset"] = Appointment.objects.all()
-         
+    context["dataset"] = Appointment.objects.all() 
     return render(request, "appointment/home.html", context)
 
 @login_required
@@ -38,8 +37,7 @@ def create(request):
     
     if form.is_valid():
         form.save()
-        return HttpResponseRedirect("/Appointments/")
-         
+        return HttpResponseRedirect("/Appointments/") 
     context['form']= form
     return render(request, "appointment/create.html", context)
     
