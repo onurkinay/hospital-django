@@ -24,7 +24,7 @@ def home(request):
     return render(request, "doctor/home.html", context)
 
 @login_required
-@user_passes_test(lambda u: is_member(u,["Admin","Doctor"])) #sadece giriş yapan doktor kend bilgileri erişebilir
+@user_passes_test(lambda u: is_member(u,["Admin","Doctor","Patient"])) #sadece giriş yapan doktor kend bilgileri erişebilir
 def details(request,id): 
     queryset = Doctor.objects.filter(ID=id).values()
     return JsonResponse(list(queryset),safe=False)
