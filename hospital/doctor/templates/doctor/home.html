@@ -156,17 +156,17 @@
       event.preventDefault()
       this.blur()
       $.get(this.href, function (json) {
-        const doctor = json[0]
-        $('li.docNameSurname').html('<span>Name Surname:</span> ' + doctor.Name + ' ' + doctor.Surname)
-        $('li.docDoB').html('<span>Date of Birth:</span> ' + new Date(doctor.DateOfBirth).toLocaleDateString())
-        $('li.docNumber').html('<span>Phone Number:</span> ' + doctor.Phone)
-        $('li.docEmail').html('<span>Email:</span> ' + doctor.Email)
-        $('li.docGender').html('<span>Gender:</span> ' + (doctor.Gender ? 'Male' : 'Female'))
-        $('li.docExperience').html('<span>Experience:</span> ' + doctor.Experience)
-        $('li.docSpecializations').html('<span>Specializations:</span> ' + doctor.Specializations)
-        $('li.docLangs').html('<span>Languages:</span> ' + doctor.Languages)
-        $('li.docSalary').html('<span>Salary:</span> ' + doctor.Salary)
-        $.get('/Departments/getDeptName/' + doctor.Department_id, function (department) {
+        const doctor = json
+        $('li.docNameSurname').html('<span>Name Surname:</span> ' + doctor[1].first_name + ' ' + doctor[1].last_name)
+        $('li.docDoB').html('<span>Date of Birth:</span> ' + new Date(doctor[0].DateOfBirth).toLocaleDateString())
+        $('li.docNumber').html('<span>Phone Number:</span> ' + doctor[0].Phone)
+        $('li.docEmail').html('<span>Email:</span> ' + doctor[1].email)
+        $('li.docGender').html('<span>Gender:</span> ' + (doctor[0].Gender ? 'Male' : 'Female'))
+        $('li.docExperience').html('<span>Experience:</span> ' + doctor[0].Experience)
+        $('li.docSpecializations').html('<span>Specializations:</span> ' + doctor[0].Specializations)
+        $('li.docLangs').html('<span>Languages:</span> ' + doctor[0].Languages)
+        $('li.docSalary').html('<span>Salary:</span> ' + doctor[0].Salary)
+        $.get('/Departments/getDeptName/' + doctor[0].Department_id, function (department) {
           $('li.docDept').html('<span>Department:</span> ' + department)
           $('#ex1').modal()
         })

@@ -93,14 +93,14 @@
       event.preventDefault()
       this.blur()
       $.get(this.href, function (json) {
-        const patient = json[0]
-        $('li.patNameSurname').html('<span>Name Surname:</span> ' + patient.Name + ' ' + patient.Surname)
-        $('li.patDoB').html('<span>Date of Birth:</span> ' + new Date(patient.DateOfBirth).toLocaleDateString())
-        $('li.patNumber').html('<span>Phone Number:</span> ' + patient.Phone)
-        $('li.patEmail').html('<span>Email:</span> ' + patient.Email)
-        $('li.patGender').html('<span>Gender:</span> ' + (patient.Gender ? 'Male' : 'Female'))
-        $('li.patBlood').html('<span>Blood Group:</span> ' + patient.Blood_Group)
-        $('li.patAddress').html('<span>Address:</span> ' + patient.Address)
+        const patient = json
+        $('li.patNameSurname').html('<span>Name Surname:</span> ' + patient[1].first_name + ' ' + patient[1].last_name)
+        $('li.patDoB').html('<span>Date of Birth:</span> ' + new Date(patient[0].DateOfBirth).toLocaleDateString())
+        $('li.patNumber').html('<span>Phone Number:</span> ' + patient[0].Phone)
+        $('li.patEmail').html('<span>Email:</span> ' + patient[1].email)
+        $('li.patGender').html('<span>Gender:</span> ' + (patient[0].Gender ? 'Male' : 'Female'))
+        $('li.patBlood').html('<span>Blood Group:</span> ' + patient[0].Blood_Group)
+        $('li.patAddress').html('<span>Address:</span> ' + patient[0].Address)
     
         $('#ex1').modal()
       })

@@ -29,7 +29,7 @@ def home(request):
 @user_passes_test(lambda u: is_member(u,["Patient","Admin","Doctor"]))
 def details(request,id):  
     queryset = Patient.objects.filter(ID=id).values()
-    patientUser = User.objects.filter(id=queryset[0]["User_id"]).values("first_name","last_name")
+    patientUser = User.objects.filter(id=queryset[0]["User_id"]).values("first_name","last_name","email")
     return JsonResponse(list(chain(queryset,patientUser)),safe=False)
     
  
