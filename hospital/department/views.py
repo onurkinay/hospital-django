@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import JsonResponse, HttpResponseBadRequest,HttpResponse
 from django.shortcuts import (get_object_or_404,
                               render,
@@ -5,17 +6,26 @@ from django.shortcuts import (get_object_or_404,
 
 from .models import Department
 from .forms import DepartmentForm
-# Create your views here.
+
+def is_member(user, listgroup):
+    return user.groups.filter(name__in=listgroup).exists()
+
+@login_required
+@user_passes_test(lambda u: is_member(u,["Admin"]))
 def home(request):
     context ={} 
     context["dataset"] = Department.objects.all()
          
     return render(request, "department/home.html", context)
 
+@login_required
+@user_passes_test(lambda u: is_member(u,["Admin"]))
 def details(request,id): 
     queryset = Department.objects.filter(ID=id).values()
     return JsonResponse(list(queryset),safe=False)
 
+@login_required
+@user_passes_test(lambda u: is_member(u,["Admin"]))
 def create(request):
     context ={}
   
@@ -27,7 +37,8 @@ def create(request):
     context['form']= form
     return render(request, "department/create.html", context)
 
-
+@login_required
+@user_passes_test(lambda u: is_member(u,["Admin"]))
 def edit(request,id): 
     context ={}
   
@@ -41,7 +52,10 @@ def edit(request,id):
     context["form"] = form 
     return render(request, "department/edit.html", context)
 
-def delete(request,id):
+
+@login_required
+@user_passes_test(lambda u: is_member(u,["Admin"]))
+def delete(request,id):#silinen departmanlara bağlı doktorları ilk departmanlara al
     context ={}
     if id == 1:
         HttpResponseBadRequest('<h1>You are not delete special department</h1>')
@@ -50,13 +64,14 @@ def delete(request,id):
   
     if request.method =="POST":
         # delete object
-        obj.delete()
-        # after deleting redirect to 
-        # home page
+        obj.delete() 
         return HttpResponseRedirect("/Departments/")
  
     return HttpResponseBadRequest('<h1>You are not authorized to view this page</h1>')
 
+
+@login_required
+@user_passes_test(lambda u: is_member(u,["Admin","Patient","Doctor"]))
 def getDeptName(request,id):
     obj = get_object_or_404(Department, ID = id)
     return HttpResponse(obj.Name)

@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required, user_passes_test
+
 from django.http import JsonResponse, HttpResponseBadRequest,HttpResponse
 from django.shortcuts import (get_object_or_404,
                               render,
@@ -7,20 +9,28 @@ from django.contrib.auth.models import User,Group
 from django.http import QueryDict
 from .models import Doctor
 from .forms import DoctorForm
-import logging
 import urllib
-#logger = logging.getLogger('app_api')
 
+def is_member(user, listgroup):
+    return user.groups.filter(name__in=listgroup).exists()
+ 
+
+@login_required
+@user_passes_test(lambda u: is_member(u,["Admin","Accountant"]))
 def home(request):
     context ={} 
     context["dataset"] = Doctor.objects.all()
          
     return render(request, "doctor/home.html", context)
 
+@login_required
+@user_passes_test(lambda u: is_member(u,["Admin","Doctor"])) #sadece giriş yapan doktor kend bilgileri erişebilir
 def details(request,id): 
     queryset = Doctor.objects.filter(ID=id).values()
     return JsonResponse(list(queryset),safe=False)
 
+@login_required
+@user_passes_test(lambda u: is_member(u,["Admin"]))
 def create(request):
     context ={}
   
@@ -64,7 +74,8 @@ def create(request):
     context['form']= DoctorForm(None)
     return render(request, "doctor/create.html", context)
 
-
+@login_required
+@user_passes_test(lambda u: is_member(u,["Admin"]))
 def edit(request,id):  
 
     context ={}
@@ -115,21 +126,21 @@ def edit(request,id):
     return render(request, "doctor/edit.html", context) 
 
   
-   
 
+@login_required
+@user_passes_test(lambda u: is_member(u,["Admin"]))
 def delete(request,id):
     obj = get_object_or_404(Doctor, ID = id)
   
-    if request.method =="POST":
-        # delete object
-        obj.delete()
-        # after deleting redirect to 
-        # home page
+    if request.method =="POST": 
+        obj.delete() 
         return HttpResponseRedirect("/Doctors/")
  
     return HttpResponseBadRequest('<h1>You are not authorized to view this page</h1>')
 
-def changeSalary(request, id):#autoration if 
+@login_required
+@user_passes_test(lambda u: is_member(u,["Accountant"]))
+def changeSalary(request, id): 
     if request.method =="POST":
         Doctor.objects.filter(ID=id).update(Salary=request.POST["newSalary"])
     return HttpResponse("successfull")

@@ -1,4 +1,4 @@
-#Patient
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.shortcuts import (get_object_or_404,
                               render,
@@ -11,17 +11,25 @@ from .forms import PatientForm
 import logging
 import urllib
 
-# Create your views here.
+def is_member(user, listgroup):
+    return user.groups.filter(name__in=listgroup).exists()
+ 
+@login_required
+@user_passes_test(lambda u: is_member(u,["Admin"]))
 def home(request):
     context ={} 
     context["dataset"] = Patient.objects.all()
          
     return render(request, "patient/home.html", context)
 
-def details(request,id): #param id, json return
+@login_required
+@user_passes_test(lambda u: is_member(u,["Patient","Admin"]))
+def details(request,id):  
     queryset = Patient.objects.filter(ID=id).values()
     return JsonResponse(list(queryset),safe=False)
  
+@login_required
+@user_passes_test(lambda u: is_member(u,["Admin","Patient"]))
 def edit(request,id):
     context ={}
     obj = get_object_or_404(Patient, ID = id)
@@ -70,6 +78,8 @@ def edit(request,id):
     context["user"] = User.objects.get(id = obj.User_id)
     return render(request, "patient/edit.html", context) 
 
+@login_required
+@user_passes_test(lambda u: is_member(u,["Admin"]))
 def delete(request):
     obj = get_object_or_404(Patient, ID = id)
   

@@ -8,11 +8,15 @@
   <section id="doktor-yonetimi">
     <div class="container">
       <h2 style="display:inline">Doctor Management</h2>
-      <div class="addButton">
-        <a class="addButtonInside" href="/Doctors/Create">Add Doctor</a>
-      </div>
-      <div class="bosluk"></div>
+      {% for group in request.user.groups.all %}
+        {% if group.name == 'Admin' %}
+          <div class="addButton">
+            <a class="addButtonInside" href="/Doctors/Create">Add Doctor</a>
+          </div>
+        {% endif %}
+      {% endfor %}
 
+      <div class="bosluk"></div>
       {% if dataset.count == 0 %}
         <p>No record</p>
       {% else %}
@@ -36,12 +40,16 @@
               <div class="col col-3">{{ data.Specializations }}</div>
               <div class="col col-3">{{ data.Salary }}</div>
               <div class="col col-4" data-label="Operation">
-                <a href="/Doctors/Edit/{{ data.ID }}">Edit</a> |
-                <a class="getDetails" href="/Doctors/Details/{{ data.ID }}/">Details</a>
-
-                |<a class="changeSalary" href="/Doctors/ChangeSalary/{{ data.ID }}/">Change Salary</a>
-
-                | <a class="delete" href="/Doctors/Delete/{{ data.ID }}/">Delete</a>
+                {% for group in request.user.groups.all %}
+                  {% if group.name == 'Accountant' %}
+                    <a class="changeSalary" href="/Doctors/ChangeSalary/{{ data.ID }}/">Change Salary</a>
+                    <a class="getDetails" href="/Doctors/Details/{{ data.ID }}/">| Details</a>
+                  {% else %}
+                    <a href="/Doctors/Edit/{{ data.ID }}">Edit</a> |
+                    <a class="getDetails" href="/Doctors/Details/{{ data.ID }}/">Details</a>
+                    | <a class="delete" href="/Doctors/Delete/{{ data.ID }}/">Delete</a>
+                  {% endif %}
+                {% endfor %}
               </div>
             </li>
           {% endfor %}

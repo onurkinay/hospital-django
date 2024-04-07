@@ -1,4 +1,4 @@
-#Bills
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.shortcuts import (get_object_or_404,
                               render,
@@ -9,18 +9,27 @@ from django.shortcuts import render
 
 from .models import Bill
 from .forms import BillForm
- 
- 
+
+
+def is_member(user, listgroup):
+    return user.groups.filter(name__in=listgroup).exists()
+
+@login_required
+@user_passes_test(lambda u: is_member(u,["Admin","Patient"]))
 def home(request):
     context ={}
   
     context["dataset"] = Bill.objects.all() 
     return render(request, "bill/home.html", context)
 
+@login_required
+@user_passes_test(lambda u: is_member(u,["Admin","Patient","Accountant"]))
 def details(request): #param id
     queryset = Bill.objects.filter(ID=id).values()
     return JsonResponse({"Bill": list(queryset)})
 
+@login_required
+@user_passes_test(lambda u: is_member(u,["Accountant"]))
 def create(request): 
     context ={}
   
@@ -31,6 +40,8 @@ def create(request):
     context['form']= form
     return render(request, "bill/create.html", context)
 
+@login_required
+@user_passes_test(lambda u: is_member(u,["Accountant"]))
 def edit(request,id): 
     context ={}
   
@@ -46,6 +57,8 @@ def edit(request,id):
  
     return render(request, "bill/edit.html", context)
 
+@login_required
+@user_passes_test(lambda u: is_member(u,["Accountant"]))
 def delete(request):
     obj = get_object_or_404(Bill, ID = id)
   
@@ -55,5 +68,7 @@ def delete(request):
  
     return HttpResponseBadRequest('<h1>You are not authorized to view this page</h1>')
 
+@login_required
+@user_passes_test(lambda u: is_member(u,["Patient"]))
 def payment(request, id):
     return False

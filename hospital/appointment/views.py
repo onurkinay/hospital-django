@@ -12,14 +12,11 @@ from .models import Appointment
 from .forms import AppointmentForm
 
 
-def is_member(user):
-    return user.groups.filter(name__in=['Doctor', 'Patient']).exists()
-
-def is_patient(user):
-    return user.groups.filter(name__in=['Patient']).exists()
+def is_member(user, listgroup):
+    return user.groups.filter(name__in=listgroup).exists()
 
 @login_required
-@user_passes_test(is_member)
+@user_passes_test(lambda u: is_member(u,["Admin","Patient","Doctor"]))
 def home(request):
     context ={} 
     context["dataset"] = Appointment.objects.all()
@@ -27,13 +24,13 @@ def home(request):
     return render(request, "appointment/home.html", context)
 
 @login_required
-@user_passes_test(is_member)
+@user_passes_test(lambda u: is_member(u,["Admin","Patient","Doctor"]))
 def details(request,id): 
     queryset = Appointment.objects.filter(ID=id).values()
     return JsonResponse(list(queryset),safe=False)
 
 @login_required
-@user_passes_test(is_patient)
+@user_passes_test(lambda u: is_member(u,["Patient"]))
 def create(request):
     
     context ={} 
@@ -47,7 +44,7 @@ def create(request):
     return render(request, "appointment/create.html", context)
     
 @login_required
-@user_passes_test(is_member)
+@user_passes_test(lambda u: is_member(u,["Admin","Patient","Doctor"]))
 def edit(request,id): 
     context ={} 
     obj = get_object_or_404(Appointment, ID= id)
@@ -63,8 +60,7 @@ def edit(request,id):
  
     return render(request, "appointment/edit.html", context)
 
-@login_required
-@user_passes_test(is_member)
+@user_passes_test(lambda u: is_member(u,["Admin","Patient","Doctor"]))
 def delete(request,id):
     obj = get_object_or_404(Appointment, ID = id)
   
