@@ -3,7 +3,7 @@ from django.shortcuts import (get_object_or_404,
                               render,
                               HttpResponseRedirect)
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User,Group
 from django.http import QueryDict
 from .models import Doctor
 from .forms import DoctorForm
@@ -50,6 +50,10 @@ def create(request):
                                  email=username,
                                  password=password,first_name=name,last_name=surname)
             user.save()
+
+            my_group = Group.objects.get(name='Doctor')
+            my_group.user_set.add(user)
+
             forme = form.save(commit=False)
             form.instance.User = user 
             forme.save()

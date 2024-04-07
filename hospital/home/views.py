@@ -3,13 +3,13 @@ from django.shortcuts import (get_object_or_404,
                               render,
                               HttpResponseRedirect)
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User,Group
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.http import QueryDict
 from patient.models import Patient
 from patient.forms import PatientForm
 import logging
-import urllib
+import urllib 
 
 
 # Create your views here.
@@ -74,8 +74,12 @@ def register(request):
         if form.is_valid() and password == password_confirm:
             user = User.objects.create_user(username=username,
                                  email=username,
-                                 password=password,first_name=name,last_name=surname)
+                                 password=password,first_name=name,last_name=surname) 
             user.save()
+
+            my_group = Group.objects.get(name='Patient')
+            my_group.user_set.add(user)
+            
             forme = form.save(commit=False)
             form.instance.User = user 
             forme.save()
