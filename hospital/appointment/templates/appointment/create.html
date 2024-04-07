@@ -14,16 +14,20 @@
         <div class="kisisel-bilgiler" style="width:initial">
           <ul>
             {% for field in form %}
-              <li>
-                {{ field.errors }}
-                {{ field.label_tag }}
-
+              {% if field.field.widget.is_hidden %}
                 {{ field }}
+              {% else %}
+                <li>
+                  {{ field.errors }}
+                  {{ field.label_tag }}
 
-                {% if field.help_text %}
-                  <p class="help" id="{{ field.auto_id }}_helptext">{{ field.help_text|safe }}</p>
-                {% endif %}
-              </li>
+                  {{ field }}
+
+                  {% if field.help_text %}
+                    <p class="help" id="{{ field.auto_id }}_helptext">{{ field.help_text|safe }}</p>
+                  {% endif %}
+                </li>
+              {% endif %}
             {% endfor %}
             <li>
               <button type="submit">Send</button>

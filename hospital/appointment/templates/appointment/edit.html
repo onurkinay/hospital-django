@@ -8,35 +8,47 @@
   <form method="post">
     {% csrf_token %}
     <section id="ozel-sayfa">
-      <h2 style="margin-left: 13%;">Create Appointment</h2>
+      <h2 style="margin-left: 13%;">Edit Appointment</h2>
 
       {{ form.non_field_errors }}
       <div class="container" style="display:block">
         <div class="kisisel-bilgiler" style="width:initial">
-          <!-- DOKTORUN GÖRECEĞİ KISIM -->
-          <div class="form-group">
-            <label for="doktor-id">Patient:</label>
-            <label for="Patient_One">Patient One</label>
-            <a href="/Patients/Details/1" class="getDetails">Get Details</a>
-          </div>
-          <!-- HASTANIN GÖRECEĞİ KISIM -->
-          <div class="form-group">
-            <label for="patient-id">Doctor:</label>
-            <label for="Patient_One">Doctor One</label>
-            <a href="/Doctors/Details/1" class="getDetails">Get Details</a>
-          </div>
+          {% for group in request.user.groups.all %}
+            {% if group.name == 'Doctor' %}
+              <div class="form-group">
+                <label for="doktor-id">Patient:</label>
+                <label for="Patient_One">{{ form.instance.PatientID.User.first_name }} {{ form.instance.PatientID.User.last_name }}</label>
+                <a href="/Patients/Details/1" class="getDetails">Get Details</a>
+              </div>
+            {% else %}
+              <div class="form-group">
+                <label for="doctor-id">Doctor:</label>
+                <label for="Doctor">{{ form.instance.DoctorID.User.first_name }} {{ form.instance.DoctorID.User.last_name }}</label>
+
+                <a href="/Doctors/Details/{{ form.instance.DoctorID.ID }}" class="getDetails">Get Details</a>
+              </div>
+            {% endif %}
+          {% endfor %}
+          <input type="hidden" name="DoctorID" value="{{ form.instance.DoctorID.ID }}" id="id_DoctorID" />
+          <input type="hidden" name="PatientID" value="{{ form.instance.PatientID.ID }}" id="id_PatientID" />
           <ul>
             {% for field in form %}
-              <li>
-                {{ field.errors }}
-                {{ field.label_tag }}
+              {% if field.auto_id != 'id_DoctorID' and field.auto_id != 'id_PatientID' %}
+                {% if field.field.widget.is_hidden %}
+                  {{ field }}
+                {% else %}
+                  <li>
+                    {{ field.errors }}
+                    {{ field.label_tag }}
 
-                {{ field }}
+                    {{ field }}
 
-                {% if field.help_text %}
-                  <p class="help" id="{{ field.auto_id }}_helptext">{{ field.help_text|safe }}</p>
+                    {% if field.help_text %}
+                      <p class="help" id="{{ field.auto_id }}_helptext">{{ field.help_text|safe }}</p>
+                    {% endif %}
+                  </li>
                 {% endif %}
-              </li>
+              {% endif %}
             {% endfor %}
             <li>
               <button type="submit">Send</button>
@@ -50,49 +62,61 @@
   <div id="ex1" class="modal">
     <section id="ozel-sayfa" style="padding:0;margin-bottom:0">
       <div class="container" style="max-width:initial">
-        <!-- doctor -->
-        <div class="kisisel-bilgiler" style="width:100%">
-          <h3>Patient</h3>
-          <ul>
-            <li class="patientNameSurname"></li>
-            <li class="patientBlood"></li>
-          </ul>
-        </div>
-        <!-- patient -->
-        <div class="kisisel-bilgiler">
-          <h3>Doctor</h3>
-          <ul>
-            <li class="doctorNameSurname"></li>
-            <li class="doctorDept"></li>
-          </ul>
-        </div>
+        {% for group in request.user.groups.all %}
+          {% if group.name == 'Doctor' %}
+            <div class="kisisel-bilgiler" style="width:100%">
+              <h3>Patient</h3>
+              <ul>
+                <li class="patientNameSurname"></li>
+                <li class="patientBlood"></li>
+              </ul>
+            </div>
+          {% else %}
+            <div class="kisisel-bilgiler" style="width:100%">
+              <h3>Doctor</h3>
+              <ul>
+                <li class="doctorNameSurname"></li>
+                <li class="doctorDept"></li>
+              </ul>
+            </div>
+          {% endif %}
+        {% endfor %}
       </div>
     </section>
   </div>
 
-  <script>
-    $('.getDetails').click(function (event) {
-      //doctor
-      event.preventDefault()
-      this.blur()
-      $.get(this.href, function (html) {
-        const patient = html[0]
-        $('li.patientNameSurname').html('<span>Name Surname:</span> ' + patient.Name + ' ' + patient.Surname)
-        $('li.patientBlood').html('<span>Blood Group:</span> ' + patient.Blood_Group)
-        $('#ex1').modal()
-      })
-    })
-    
-    $('.getDetails').click(function (event) {
-      //doctor
-      event.preventDefault()
-      this.blur()
-      $.get(this.href, function (html) {
-        const dector = html[0]
-        $('li.doctorNameSurname').html('<span>Name Surname:</span> ' + doctor.Name + ' ' + Doctor.Surname)
-        $('li.doctorDept').html('<span>Blood Group:</span> ' + doctor.Blood_Group) //dept name
-        $('#ex1').modal()
-      })
-    })
-  </script>
+  {% for group in request.user.groups.all %}
+    {% if group.name == 'Doctor' %}
+      <script>
+        $('.getDetails').click(function (event) {
+          //doctor
+          event.preventDefault()
+          this.blur()
+          $.get(this.href, function (html) {
+            const patient = html[0]
+            $('li.patientNameSurname').html('<span>Name Surname:</span> ' + patient.Name + ' ' + patient.Surname)
+            $('li.patientBlood').html('<span>Blood Group:</span> ' + patient.Blood_Group)
+            $('#ex1').modal()
+          })
+        })
+      </script>
+    {% else %}
+      <script>
+        $('.getDetails').click(function (event) {
+          //doctor
+          event.preventDefault()
+          this.blur()
+          $.get(this.href, function (html) {
+            const doctor = html[0]
+            $('li.doctorNameSurname').html('<span>Name Surname:</span> ' + doctor.Name + ' ' + doctor.Surname)
+            $.get('/Departments/getDeptName/' + doctor.Department_id, function (department) {
+              $('li.doctorDept').html('<span>Department:</span> ' + department)
+              $('#ex1').modal()
+            })
+            $('#ex1').modal()
+          })
+        })
+      </script>
+    {% endif %}
+  {% endfor %}
 {% endblock %}

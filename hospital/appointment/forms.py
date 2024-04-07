@@ -23,5 +23,5 @@ class AppointmentForm(forms.ModelForm):
                        'placeholder': 'Select a date',
                        'type': 'datetime-local'  
                       }),
-            'PatientID': forms.HiddenInput(attrs={'value':'1'})
+            'PatientID': forms.HiddenInput()
         }

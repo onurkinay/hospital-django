@@ -5,8 +5,7 @@ from django.shortcuts import (get_object_or_404,
 
 from django.contrib.auth.models import User,Group
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
-from django.http import QueryDict
-from patient.models import Patient
+from django.http import QueryDict 
 from patient.forms import PatientForm
 import logging
 import urllib 
@@ -79,7 +78,7 @@ def register(request):
 
             my_group = Group.objects.get(name='Patient')
             my_group.user_set.add(user)
-            
+
             forme = form.save(commit=False)
             form.instance.User = user 
             forme.save()

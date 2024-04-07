@@ -5,10 +5,10 @@ from patient.models import Patient
 
 class Appointment(models.Model):
     ID = models.BigAutoField(primary_key=True)
-    Description = models.TextField()
-    AppointmentDate = models.DateTimeField()
-    DoctorID = models.ForeignKey(Doctor,on_delete=models.PROTECT)
-    PatientID = models.ForeignKey(Patient,on_delete=models.PROTECT)
+    Description = models.TextField(verbose_name="Description")
+    AppointmentDate = models.DateTimeField(verbose_name="Appointment Date")
+    DoctorID = models.ForeignKey(Doctor,on_delete=models.PROTECT,verbose_name="Doctor")
+    PatientID = models.ForeignKey(Patient,on_delete=models.PROTECT, verbose_name="Patient")
 
     class Meta:
         db_table = "appointment"

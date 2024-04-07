@@ -1,3 +1,6 @@
+from django.contrib.auth.decorators import login_required, user_passes_test
+ 
+
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.shortcuts import (get_object_or_404,
                               render,
@@ -9,23 +12,31 @@ from .models import Appointment
 from .forms import AppointmentForm
 
 
+def is_member(user):
+    return user.groups.filter(name__in=['Doctor', 'Patient']).exists()
+
+def is_patient(user):
+    return user.groups.filter(name__in=['Patient']).exists()
+
+@login_required
+@user_passes_test(is_member)
 def home(request):
     context ={} 
     context["dataset"] = Appointment.objects.all()
          
     return render(request, "appointment/home.html", context)
 
-def details(request,id): #param id
+@login_required
+@user_passes_test(is_member)
+def details(request,id): 
     queryset = Appointment.objects.filter(ID=id).values()
     return JsonResponse(list(queryset),safe=False)
 
+@login_required
+@user_passes_test(is_patient)
 def create(request):
-   
-    # dictionary for initial data with 
-    # field names as keys
-    context ={}
- 
-    # add the dictionary during initialization
+    
+    context ={} 
     form = AppointmentForm(request.POST or None)
     
     if form.is_valid():
@@ -35,29 +46,25 @@ def create(request):
     context['form']= form
     return render(request, "appointment/create.html", context)
     
-
-def edit(request,id):
-    # dictionary for initial data with 
-    # field names as keys
-    context ={}
- 
-    # fetch the object related to passed id
+@login_required
+@user_passes_test(is_member)
+def edit(request,id): 
+    context ={} 
     obj = get_object_or_404(Appointment, ID= id)
- 
-    # pass the object as instance in form
+  
     form = AppointmentForm(request.POST or None, instance = obj)
- 
-    # save the data from the form and
-    # redirect to detail_view
+     
     if form.is_valid():
         form.save()
         return HttpResponseRedirect("/Appointments/")
- 
-    # add form dictionary to context
+    
+    
     context["form"] = form
  
     return render(request, "appointment/edit.html", context)
 
+@login_required
+@user_passes_test(is_member)
 def delete(request,id):
     obj = get_object_or_404(Appointment, ID = id)
   
@@ -69,3 +76,5 @@ def delete(request,id):
         return HttpResponseRedirect("/Appointments/")
  
     return HttpResponseBadRequest('<h1>You are not authorized to view this page</h1>')
+
+

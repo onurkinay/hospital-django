@@ -18,7 +18,17 @@
   </head>
 
   <body>
-    {% include 'headers/patient.html' %} <!-- role based header -->
+    {% for group in request.user.groups.all %}
+      {% if group.name == 'Doctor' %}
+        {% include 'headers/doctor.html' %}
+      {% elif group.name == 'Patient' %}
+        {% include 'headers/patient.html' %}
+      {% elif group.name == 'Admin' %}
+        {% include 'headers/admin.html' %}
+      {% elif group.name == 'Accountant' %}
+        {% include 'headers/accountant.html' %}
+      {% endif %}
+    {% endfor %}
 
     {% block content %}
 

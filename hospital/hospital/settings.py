@@ -150,3 +150,6 @@ LOGGING = {
         },
     },
     }
+
+LOGIN_URL='/Login'
+LOGIN_REDIRECT_URL='/'
