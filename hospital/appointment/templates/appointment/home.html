@@ -122,9 +122,9 @@
             $('li.dateApp').html('<span>Date:</span> ' + new Date(appointment.AppointmentDate).toLocaleString())
             $('li.descApp').html('<span>Description:</span> ' + appointment.Description)
             $.get('/Doctors/Details/' + appointment.DoctorID_id, function (doctorJson) {
-              const doctor = doctorJson[0]
-              $('li.doctorNameSurname').html('<span>Name Surname:</span> ' + doctor.Name + ' ' + doctor.Surname)
-              $.get('/Departments/getDeptName/' + doctor.Department_id, function (department) {
+              const doctor = doctorJson
+              $('li.doctorNameSurname').html('<span>Name Surname:</span> ' + doctor[1].first_name + ' ' + doctor[1].last_name)
+              $.get('/Departments/getDeptName/' + doctor[0].Department_id, function (department) {
                 $('li.doctorDept').html('<span>Department:</span> ' + department)
                 $('#ex1').modal()
               })
@@ -146,9 +146,9 @@
             $('li.dateApp').html('<span>Date:</span> ' + new Date(appointment.AppointmentDate).toLocaleString())
             $('li.descApp').html('<span>Description:</span> ' + appointment.Description)
             $.get('/Patients/Details/' + appointment.PatientID_id, function (patientJson) {
-              const patient = patientJson[0]
-              $('li.patientNameSurname').html('<span>Name Surname:</span> ' + patient.Name + ' ' + patient.Surname)
-              $('li.patientBlood').html('<span>Blood Group:</span> ' + patient.Blood_Group)
+              const patient = patientJson
+              $('li.patientNameSurname').html('<span>Name Surname:</span> ' + patient[1].first_name + ' ' + patient[1].last_name)
+              $('li.patientBlood').html('<span>Blood Group:</span> ' + patient[0].Blood_Group)
               $('#ex1').modal()
             })
           })

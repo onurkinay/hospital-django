@@ -3,11 +3,12 @@ from django.http import JsonResponse, HttpResponseBadRequest
 from django.shortcuts import (get_object_or_404,
                               render,
                               HttpResponseRedirect)
-
+ 
 from django.shortcuts import render
 
 from .models import Prescription
 from .forms import PrescriptionForm 
+from itertools import chain
 
 def is_member(user, listgroup):
     return user.groups.filter(name__in=listgroup).exists()
@@ -24,7 +25,9 @@ def home(request):
 @user_passes_test(lambda u: is_member(u,["Doctor","Patient"]))
 def details(request,id): 
     queryset = Prescription.objects.filter(ID=id).values()
-    return JsonResponse(list(queryset),safe=False)
+    
+    return JsonResponse(list(chain(queryset)),safe=False)
+  
 
 @login_required
 @user_passes_test(lambda u: is_member(u,["Doctor","Patient"]))

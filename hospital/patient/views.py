@@ -4,12 +4,15 @@ from django.shortcuts import (get_object_or_404,
                               render,
                               HttpResponseRedirect)
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User,Group
 from django.http import QueryDict
 from .models import Patient
 from .forms import PatientForm
 import logging
 import urllib
+
+from itertools import chain
+
 
 def is_member(user, listgroup):
     return user.groups.filter(name__in=listgroup).exists()
@@ -23,10 +26,12 @@ def home(request):
     return render(request, "patient/home.html", context)
 
 @login_required
-@user_passes_test(lambda u: is_member(u,["Patient","Admin"]))
+@user_passes_test(lambda u: is_member(u,["Patient","Admin","Doctor"]))
 def details(request,id):  
     queryset = Patient.objects.filter(ID=id).values()
-    return JsonResponse(list(queryset),safe=False)
+    patientUser = User.objects.filter(id=queryset[0]["User_id"]).values("first_name","last_name")
+    return JsonResponse(list(chain(queryset,patientUser)),safe=False)
+    
  
 @login_required
 @user_passes_test(lambda u: is_member(u,["Admin","Patient"]))

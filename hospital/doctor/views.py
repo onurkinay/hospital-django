@@ -10,6 +10,8 @@ from django.http import QueryDict
 from .models import Doctor
 from .forms import DoctorForm
 import urllib
+from itertools import chain
+
 
 def is_member(user, listgroup):
     return user.groups.filter(name__in=listgroup).exists()
@@ -27,7 +29,8 @@ def home(request):
 @user_passes_test(lambda u: is_member(u,["Admin","Doctor","Patient"])) #sadece giriş yapan doktor kend bilgileri erişebilir
 def details(request,id): 
     queryset = Doctor.objects.filter(ID=id).values()
-    return JsonResponse(list(queryset),safe=False)
+    doctorUser = User.objects.filter(id=queryset[0]["User_id"]).values("first_name","last_name")
+    return JsonResponse(list(chain(queryset,doctorUser)),safe=False)
 
 @login_required
 @user_passes_test(lambda u: is_member(u,["Admin"]))
