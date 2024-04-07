@@ -11,14 +11,14 @@ GENDER_CHOICES = (
 class Doctor(models.Model):
     ID = models.BigAutoField(primary_key=True)
     User = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,blank=True, null=True)
-    DateOfBirth = models.DateField()
-    Gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
-    Phone = models.CharField(max_length=11)
-    Salary = models.IntegerField()
-    Specializations = models.CharField(max_length=300)
-    Experience = models.TextField()
-    Languages = models.CharField(max_length=300)
-    Department = models.ForeignKey(Department, on_delete=models.SET_DEFAULT,default=1)
+    DateOfBirth = models.DateField(verbose_name="Date of Birth")
+    Gender = models.CharField(max_length=1, choices=GENDER_CHOICES,verbose_name="Gender")
+    Phone = models.CharField(max_length=11,verbose_name="Phone")
+    Salary = models.IntegerField(verbose_name="Salary")
+    Specializations = models.CharField(max_length=300,verbose_name="Specializations")
+    Experience = models.TextField(verbose_name="Experience")
+    Languages = models.CharField(max_length=300,verbose_name="Languages")
+    Department = models.ForeignKey(Department, on_delete=models.SET_DEFAULT,default=1,verbose_name="Department")
 
     class Meta:
         db_table = "doctor"
