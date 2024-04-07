@@ -45,8 +45,12 @@
               {% endfor %}
               <div class="col col-6" data-label="Change Appointment Operation">
                 <a href="/Appointments/Edit/{{ data.ID }}">Edit</a> |
-                <a class="getDetails" href="/Appointments/Details/{{ data.ID }}/">Details</a> |
-                <a href="/Prescriptions/Create/{{ data.ID }}/">Create Prescription</a> |
+                <a class="getDetails" href="/Appointments/Details/{{ data.ID }}/">Details</a> |{% for group in request.user.groups.all %}
+                  {% if group.name == 'Doctor' %}
+                    <a href="/Prescriptions/Create/{{ data.ID }}/">Create Prescription</a> |
+                  {% endif %}
+                {% endfor %}
+
                 <a class="deleteApp" href="/Appointments/Delete/{{ data.ID }}/">Delete</a>
               </div>
             </li>
