@@ -1,6 +1,7 @@
 html {
     height: 100%;
 }
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -16,15 +17,15 @@ header {
     align-items: center;
     font-family: Arial, sans-serif;
     padding: 10px;
- 
+
 }
-header h1{
-    padding:0 50px;
-}
+
+header h1 {}
+
 #logo-header {
     width: 5%;
     color: #333;
- 
+
 }
 
 #logo-header {
@@ -44,25 +45,25 @@ header h1{
     margin-right: 2%;
 }
 
-    .ana-menu a {
-        text-decoration: none;
-        color: #333;
-        margin-left: auto;
-        transition: all 0.3s ease-in;
-        padding: 20px 10px;
-    }
+.ana-menu a {
+    text-decoration: none;
+    color: #333;
+    margin-left: auto;
+    transition: all 0.3s ease-in;
+    padding: 20px 10px;
+}
 
-        .ana-menu a:hover {
-            color: red;
-        }
+.ana-menu a:hover {
+    color: red;
+}
 
 section {
     padding: 20px;
     margin-bottom: 100px;
-    min-height: 100%; 
+    min-height: 100%;
 }
 
- 
+
 
 a {
     text-decoration: none;
@@ -70,14 +71,13 @@ a {
 
 /* Sifre Yonetimi */
 
-#sifre-yonetimi {
-}
+#sifre-yonetimi {}
 
 .container-password-management {
     background: linear-gradient(-45deg, #219cd9, #FFF);
     width: 40%;
     margin: 0 auto;
-    padding:45px;
+    padding: 45px;
 }
 
 #form-header {
@@ -158,7 +158,7 @@ button:hover {
     span {
         font-weight: bold;
         display: inline-block;
-       
+
     }
 
     .kisisel-bilgiler ul li:nth-child(odd) {
@@ -215,7 +215,7 @@ h2 {
         letter-spacing: 0.03em;
         display: flex;
         justify-content: space-between;
-        padding:10px;
+        padding: 10px;
     }
 
     .table-row {
@@ -285,7 +285,9 @@ label {
     font-weight: bold;
 }
 
-input,select,option {
+input,
+select,
+option {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
@@ -300,7 +302,7 @@ input,select,option {
     background-color: #000;
     color: #fff;
     padding: 10px;
-    border: none; 
+    border: none;
     cursor: pointer;
     text-align: center;
     font-size: 1rem;
@@ -310,8 +312,8 @@ input,select,option {
     background-color: #ccc;
 }
 
-.randevu-al select{
-    width:100%;
+.randevu-al select {
+    width: 100%;
 }
 
 .ozel {
@@ -360,7 +362,7 @@ nav#admin {
 .bosluk {
     height: 10px;
 }
- 
+
 
 
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap");
@@ -372,10 +374,10 @@ nav#admin {
     font-family: "Poppins", sans-serif;
 }
 
-.footer { 
+.footer {
     width: 100%;
     background: #3586ff;
-    min-height: 100px; 
+    min-height: 100px;
     padding: 20px 50px;
     display: flex;
     justify-content: center;
@@ -406,9 +408,9 @@ nav#admin {
     transition: 0.5s;
 }
 
-    .social-icon__link:hover {
-        transform: translateY(-10px);
-    }
+.social-icon__link:hover {
+    transform: translateY(-10px);
+}
 
 .menu__link {
     font-size: 1.2rem;
@@ -421,9 +423,9 @@ nav#admin {
     font-weight: 300;
 }
 
-    .menu__link:hover {
-        opacity: 1;
-    }
+.menu__link:hover {
+    opacity: 1;
+}
 
 .footer p {
     color: #fff;
@@ -431,6 +433,3 @@ nav#admin {
     font-size: 1rem;
     font-weight: 300;
 }
-
-
- 

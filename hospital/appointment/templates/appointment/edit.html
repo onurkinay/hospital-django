@@ -23,6 +23,7 @@
           <div class="form-group">
             <label for="patient-id">Doctor:</label>
             <label for="Patient_One">Doctor One</label>
+            <a href="/Doctors/Details/1" class="getDetails">Get Details</a>
           </div>
           <ul>
             {% for field in form %}
@@ -75,9 +76,21 @@
       event.preventDefault()
       this.blur()
       $.get(this.href, function (html) {
-        const patient = JSON.parse(html)
+        const patient = html[0]
         $('li.patientNameSurname').html('<span>Name Surname:</span> ' + patient.Name + ' ' + patient.Surname)
         $('li.patientBlood').html('<span>Blood Group:</span> ' + patient.Blood_Group)
+        $('#ex1').modal()
+      })
+    })
+    
+    $('.getDetails').click(function (event) {
+      //doctor
+      event.preventDefault()
+      this.blur()
+      $.get(this.href, function (html) {
+        const dector = html[0]
+        $('li.doctorNameSurname').html('<span>Name Surname:</span> ' + doctor.Name + ' ' + Doctor.Surname)
+        $('li.doctorDept').html('<span>Blood Group:</span> ' + doctor.Blood_Group) //dept name
         $('#ex1').modal()
       })
     })

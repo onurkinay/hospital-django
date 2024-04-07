@@ -1,1 +1,31 @@
-coming soon
+{% extends 'home_base.html' %} <!-- autoraztion bazlı değişim -->
+{{ form }}
+{% load static %}
+{% block title %}
+  Login
+{% endblock %}
+{% block content %}
+  <section id="sifre-yonetimi" style="margin-top:2%">
+    <h2 id="form-header">Log in</h2>
+    <div class="container-password-management">
+      <form method="post">
+        {% csrf_token %}
+        <div class="input-group">
+          <label for="kullanici_adi">E-mail:</label>
+          <input class="form-control" data-val="true" data-val-email="Email alanı geçerli bir e-posta adresi değil." data-val-required="Email alanı gereklidir." id="Email" name="Email" type="text" value="" />
+        </div>
+        <div class="input-group">
+          <label for="eski_sifre">Password:</label>
+          <input class="form-control" data-val="true" data-val-required="Password alanı gereklidir." id="Password" name="Password" type="password" />
+        </div>
+        <div class="input-group">
+          <label for="yeni_sifre">
+            Remember me:<input data-val="true" data-val-required="Remember me? alanı gereklidir." id="RememberMe" name="RememberMe" style="width:initial" type="checkbox" value="true" />
+            <input name="RememberMe" type="hidden" value="false" />
+          </label>
+        </div>
+        <button type="submit">Log in</button>
+      </form>
+    </div>
+  </section>
+{% endblock %}

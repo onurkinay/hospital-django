@@ -4,6 +4,7 @@ from django.shortcuts import (get_object_or_404,
                               HttpResponseRedirect)
 
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.http import QueryDict
 from patient.models import Patient
 from patient.forms import PatientForm
@@ -22,8 +23,28 @@ def about(request):
 def contact(request):
     return render(request,'contact.html')
 
-def login(request):
-    return render(request,'login.html')
+def login(request):  
+    if request.method == "POST":
+        if not request.user.is_authenticated:
+            user = authenticate(username=request.POST["Email"], password=request.POST["Password"])
+            if user is not None:
+                auth_login(request, user)
+                return HttpResponseRedirect("/")
+            else:
+                return HttpResponseBadRequest("Kullanıcı veya şifre hatalı")
+        
+    
+    if not request.user.is_authenticated:
+        return render(request,'login.html')
+    else:
+        return HttpResponseRedirect("/")
+    
+def logout(request):
+    if not request.user.is_authenticated:
+        return render(request,'login.html')
+    else:
+        auth_logout(request)
+        return HttpResponseRedirect("/")
 
 def register(request):
     context ={}
