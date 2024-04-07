@@ -15,7 +15,7 @@
           <ul>
             {% for field in form %}
               {% if field.field.widget.is_hidden %}
-                {{ field }}
+                <input type="hidden" name="PatientID" value="{{ request.user.id }}" id="id_PatientID" />
               {% else %}
                 <li>
                   {{ field.errors }}

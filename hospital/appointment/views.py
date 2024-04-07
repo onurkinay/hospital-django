@@ -10,10 +10,11 @@ from django.shortcuts import render
 from .models import Appointment
 from doctor.models import Doctor
 from patient.models import Patient
+from bill.models import Bill
 
 from .forms import AppointmentForm
 from itertools import chain
-
+from datetime import datetime
 
 def is_member(user, listgroup):
     return user.groups.filter(name__in=listgroup).exists()
@@ -40,7 +41,11 @@ def create(request):
     form = AppointmentForm(request.POST or None)
     
     if form.is_valid():
+       
         form.save()
+
+        b = Bill(IssuedDate=datetime.now(), Amount=100, IsPaid=False,Appointment=form.instance)
+        b.save() 
         return HttpResponseRedirect("/Appointments/") 
     context['form']= form
     return render(request, "appointment/create.html", context)
