@@ -1,0 +1,51 @@
+{% extends 'management_base.html' %}
+{% load static %}
+
+{% block title %}
+  Doctor
+{% endblock %}
+{% block content %}
+  <section id="ozel-sayfa">
+    <h2 style="margin-left: 13%;">My Page</h2>
+    <div class="container">
+      <div class="kisisel-bilgiler">
+        <h3>Personal Information</h3>
+        <ul>
+          <li>
+            <span>Adı Soyadı:</span> Dr. {{ request.user.first_name }} {{ request.user.last_name }}
+          </li>
+          <li>
+            <span>Uzmanlık Alanı:</span> {{ data.Department.Name }}
+          </li>
+          <li>
+            <span>Doğum Tarihi:</span> {{ data.DateOfBirth }}
+          </li>
+          <li>
+            <span>Telefon Numarası:</span> {{ data.Phone }}
+          </li>
+          <li>
+            <span>E-posta Adresi:</span> {{ request.user.email }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="hesap-bilgileri">
+        <h3>-</h3>
+        <ul>
+          <li>
+            <span>Experience:</span> {{ data.Experience }}
+          </li>
+          <li>
+            <span>Specizalizations:</span> {{ data.Specializations }}
+          </li>
+          <li>
+            <span>Languages:</span> {{ data.Languages }}
+          </li>
+          <li>
+            <span>Gender:</span> {{ data.Gender }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+{% endblock %}

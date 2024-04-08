@@ -2,7 +2,7 @@ from django.http import JsonResponse, HttpResponseBadRequest
 from django.shortcuts import (get_object_or_404,
                               render,
                               HttpResponseRedirect)
-
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User,Group
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.http import QueryDict 
@@ -10,8 +10,13 @@ from patient.forms import PatientForm
 import logging
 import urllib 
 
+from patient.models import Patient
+from doctor.models import Doctor
+#accountant, admin
 
-# Create your views here.
+
+def is_member(user, listgroup):
+    return user.groups.filter(name__in=listgroup).exists()
 
 def home(request): 
     return render(request,'index.html')
@@ -28,7 +33,7 @@ def login(request):
             user = authenticate(username=request.POST["Email"], password=request.POST["Password"])
             if user is not None:
                 auth_login(request, user)
-                return HttpResponseRedirect("/")
+                return HttpResponseRedirect("/Management")
             else:
                 return HttpResponseBadRequest("Kullanıcı veya şifre hatalı")
         
@@ -88,3 +93,18 @@ def register(request):
          
     context['form']= PatientForm(None)
     return render(request, "register.html", context)
+
+@login_required
+def management(request):
+    context ={}
+    if is_member(request.user, ["Doctor"]):
+        context["data"] = Doctor.objects.get(User_id=request.user.id)
+        return render(request, "management/doctor.html", context)
+    elif is_member(request.user, ["Patient"]): 
+        context["data"] = Patient.objects.get(User_id=request.user.id)
+        return render(request, "management/patient.html", context)
+    elif is_member(request.user, ["Admin"]): 
+        return render(request, "management/admin.html", context)
+    elif is_member(request.user, ["Accountant"]): 
+        return render(request, "management/accountant.html", context)
+   
