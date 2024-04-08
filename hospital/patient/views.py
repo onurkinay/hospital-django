@@ -35,7 +35,9 @@ def details(request,id):
  
 @login_required
 @user_passes_test(lambda u: is_member(u,["Admin","Patient"]))
-def edit(request,id):
+def edit(request,id=-1):
+    if id == -1:
+        id =Patient.objects.filter(User_id = request.user.id).values()[0]["ID"]
     context ={}
     obj = get_object_or_404(Patient, ID = id)
   
@@ -75,7 +77,10 @@ def edit(request,id):
 
             user.save()
             form.save()
-            return HttpResponseRedirect("/Patients/")
+            if is_member(request.user,["Admin"]):
+                return HttpResponseRedirect("/Patients/")
+            else:
+                return HttpResponseRedirect("/Management/")
         else:
             return HttpResponseBadRequest(form.errors)
          

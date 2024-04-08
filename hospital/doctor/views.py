@@ -78,9 +78,10 @@ def create(request):
     return render(request, "doctor/create.html", context)
 
 @login_required
-@user_passes_test(lambda u: is_member(u,["Admin"]))
-def edit(request,id):  
-
+@user_passes_test(lambda u: is_member(u,["Admin","Doctor"]))
+def edit(request,id=-1):  
+    if id == -1:
+          id = Doctor.objects.filter(User_id = request.user.id).values()[0]["ID"]
     context ={}
     obj = get_object_or_404(Doctor, ID = id)
   
@@ -120,7 +121,10 @@ def edit(request,id):
 
             user.save()
             form.save()
-            return HttpResponseRedirect("/Doctors/")
+            if is_member(request.user,["Admin"]):
+                return HttpResponseRedirect("/Doctors/")
+            else:
+                return HttpResponseRedirect("/Management/")
         else:
             return HttpResponseBadRequest(form.errors)
          
