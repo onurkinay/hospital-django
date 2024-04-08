@@ -49,7 +49,7 @@ def edit(request,id=-1):
             key, val = item.split("=", 1)
             if key in result[-1]:
                 result.append({})
-            result[-1][key] = urllib.parse.unquote(val)
+            result[-1][key] = urllib.parse.unquote(val).replace("+"," ")
 
        
         UserId = result[0].pop("UserId")

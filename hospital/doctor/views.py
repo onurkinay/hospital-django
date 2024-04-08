@@ -44,7 +44,7 @@ def create(request):
             key, val = item.split("=", 1)
             if key in result[-1]:
                 result.append({})
-            result[-1][key] = urllib.parse.unquote(val)
+            result[-1][key] = urllib.parse.unquote(val).replace("+"," ")
  
         username = result[0]["Email"]
         name = result[0].pop("Name")
@@ -89,11 +89,11 @@ def edit(request,id=-1):
   
     result = [{}]
     if request.method == "POST":
-        for item in str(request.body)[2:-1].split("&"):
+        for item in str(request.body.decode('utf-8'))[2:-1].split("&"):
             key, val = item.split("=", 1)
             if key in result[-1]:
                 result.append({})
-            result[-1][key] = urllib.parse.unquote(val)
+            result[-1][key] = urllib.parse.unquote(val).replace("+"," ")
 
        
         UserId = result[0].pop("UserId")
