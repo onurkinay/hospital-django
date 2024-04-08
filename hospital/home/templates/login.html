@@ -7,6 +7,7 @@
 {% block content %}
   <section id="sifre-yonetimi" style="margin-top:2%">
     <h2 id="form-header">Log in</h2>
+
     <div class="container-password-management">
       <form method="post">
         {% csrf_token %}
@@ -26,6 +27,9 @@
         </div>
         <button type="submit">Log in</button>
       </form>
+      {% if message != '' %}
+        <p>{{ message }}</p>
+      {% endif %}
     </div>
   </section>
 {% endblock %}

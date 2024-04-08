@@ -102,6 +102,23 @@ def edit(request,id=-1):
         surname = result[0].pop("Surname")
         password =   result[0].pop("password")
         password_confirm =  result[0].pop("passwordconfirm")
+
+        if password == "" or password_confirm=="":
+            context["form"] = form 
+            context["user"] = User.objects.get(id = obj.User_id)
+            context["message"] = "Password is required"
+            return render(request, "doctor/edit.html", context)
+        if password != password_confirm:
+            context["message"] = "Password is not confirmed"
+            context["form"] = form 
+            context["user"] = User.objects.get(id = obj.User_id)
+            return render(request, "doctor/edit.html", context)
+        
+        if User.objects.filter(username=username).exists():
+            context["message"] = "Email already taken"
+            context["form"] = form 
+            context["user"] = User.objects.get(id = obj.User_id)
+            return render(request, "doctor/edit.html", context)
  
         query_dict = QueryDict('', mutable=True)
         query_dict.update(result[0])
@@ -126,7 +143,10 @@ def edit(request,id=-1):
             else:
                 return HttpResponseRedirect("/Management/")
         else:
-            return HttpResponseBadRequest(form.errors)
+            context["message"] = form.errors
+            context["form"] = form 
+            context["user"] = User.objects.get(id = obj.User_id)
+            return render(request, "doctor/edit.html", context)
          
     context["form"] = form 
     context["user"] = User.objects.get(id = obj.User_id)

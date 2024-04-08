@@ -27,7 +27,8 @@ def about(request):
 def contact(request):
     return render(request,'contact.html')
 
-def login(request):  
+def login(request):
+    context = {}
     if request.method == "POST":
         if not request.user.is_authenticated:
             user = authenticate(username=request.POST["Email"], password=request.POST["Password"])
@@ -35,7 +36,8 @@ def login(request):
                 auth_login(request, user)
                 return HttpResponseRedirect("/Management")
             else:
-                return HttpResponseBadRequest("Kullanıcı veya şifre hatalı")
+                context["message"] = "Invalid username or password"
+                return render(request,'login.html',context)
         
     
     if not request.user.is_authenticated:
@@ -54,8 +56,7 @@ def register(request):
     context ={}
   
     result = [{}]
-    if request.method == "POST":
-       
+    if request.method == "POST": 
         for item in str(request.body)[2:-1].split("&"):
             key, val = item.split("=", 1)
             if key in result[-1]:
@@ -69,6 +70,20 @@ def register(request):
         surname = result[0].pop("Surname")
         password =   result[0].pop("password")
         password_confirm =  result[0].pop("passwordconfirm")
+
+        if password == "" or password_confirm=="":
+            context['form']= PatientForm(None)
+            context["message"] = "Password is required"
+            return render(request, "register.html", context)
+        if password != password_confirm:
+            context["message"] = "Password is not confirmed"
+            context['form']= PatientForm(None)
+            return render(request, "register.html", context)
+        
+        if User.objects.filter(username=username).exists():
+            context["message"] = "Email already taken"
+            context['form']= PatientForm(None)
+            return render(request, "register.html", context)
  
 
         query_dict = QueryDict('', mutable=True)
@@ -89,7 +104,8 @@ def register(request):
             forme.save()
             return HttpResponseRedirect("/Login/")
         else:
-            return HttpResponseBadRequest(form.errors)
+            context["message"] = form.errors
+            return render(request, "register.html", context)
          
     context['form']= PatientForm(None)
     return render(request, "register.html", context)
