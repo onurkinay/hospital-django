@@ -49,6 +49,7 @@ def create(request, id):
     form = PrescriptionForm(request.POST or None)
     if form.is_valid():
         form.save()
+        return HttpResponseRedirect("/Prescriptions/")
          
     context['form']= form
     context["appointment"] = Appointment.objects.filter(ID=id)[0]
