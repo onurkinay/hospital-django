@@ -6,6 +6,7 @@ from django.shortcuts import (get_object_or_404,
 
 from .models import Department
 from .forms import DepartmentForm
+from doctor.models import Doctor
 
 def is_member(user, listgroup):
     return user.groups.filter(name__in=listgroup).exists()
@@ -58,12 +59,12 @@ def edit(request,id):
 def delete(request,id):#silinen departmanlara bağlı doktorları ilk departmanlara al
     context ={}
     if id == 1:
-        HttpResponseBadRequest('<h1>You are not delete special department</h1>')
-    # fetch the object related to passed id
+        HttpResponseBadRequest('<h1>You can not delete special department</h1>')
     obj = get_object_or_404(Department, ID = id)
   
     if request.method =="POST":
-        # delete object
+
+        Doctor.objects.filter(Department_id=id).update(Department_id=1)
         obj.delete() 
         return HttpResponseRedirect("/Departments/")
  
