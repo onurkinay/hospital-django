@@ -21,8 +21,7 @@ def is_member(user, listgroup):
 @user_passes_test(lambda u: is_member(u,["Admin","Accountant"]))
 def home(request):
     context ={} 
-    context["dataset"] = Doctor.objects.all()
-         
+    context["dataset"] = Doctor.objects.filter(IsVisible=True) 
     return render(request, "doctor/home.html", context)
 
 @login_required
@@ -157,10 +156,8 @@ def edit(request,id=-1):
 @login_required
 @user_passes_test(lambda u: is_member(u,["Admin"]))
 def delete(request,id):
-    obj = get_object_or_404(Doctor, ID = id)
-  
-    if request.method =="POST": 
-        obj.delete() 
+    if request.method =="POST":
+        Doctor.objects.filter(ID=id).update(IsVisible=False)
         return HttpResponseRedirect("/Doctors/")
  
     return HttpResponseBadRequest('<h1>You are not authorized to view this page</h1>')

@@ -9,6 +9,7 @@ class Appointment(models.Model):
     AppointmentDate = models.DateTimeField(verbose_name="Appointment Date")
     DoctorID = models.ForeignKey(Doctor,on_delete=models.PROTECT,verbose_name="Doctor")
     PatientID = models.ForeignKey(Patient,on_delete=models.PROTECT, verbose_name="Patient")
+    IsVisible = models.BooleanField(default=True)
 
     class Meta:
         db_table = "appointment"

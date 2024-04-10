@@ -19,6 +19,7 @@ class Doctor(models.Model):
     Experience = models.TextField(verbose_name="Experience")
     Languages = models.CharField(max_length=300,verbose_name="Languages")
     Department = models.ForeignKey(Department, on_delete=models.SET_DEFAULT,default=1,verbose_name="Department")
+    IsVisible = models.BooleanField(default=True)
 
     class Meta:
         db_table = "doctor"

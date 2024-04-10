@@ -112,14 +112,9 @@ def edit(request,id=-1):
 @login_required
 @user_passes_test(lambda u: is_member(u,["Admin"]))
 def delete(request):
-    obj = get_object_or_404(Patient, ID = id)
-  
     if request.method =="POST":
-        # delete object
-        obj.delete()
-        # after deleting redirect to 
-        # home page
-        return HttpResponseRedirect("/Doctors/")
+        Patient.objects.filter(ID=id).update(IsVisible=False)
+        return HttpResponseRedirect("/Patients/") 
  
     return HttpResponseBadRequest('<h1>You are not authorized to view this page</h1>')
 

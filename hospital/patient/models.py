@@ -24,6 +24,7 @@ class Patient(models.Model):
     Blood_Group = models.CharField(max_length = 20,  choices = BLOOD_GROUPS, default = '1',verbose_name="Blood Group")
     Address =models.TextField()
     Phone = models.CharField(max_length=11)
+    IsVisible = models.BooleanField(default=True)
 
     class Meta:
         db_table = "patient"
