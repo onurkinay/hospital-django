@@ -26,7 +26,15 @@
               <div class="col col-1">100</div>
               <div class="col col-2" data-label="Operation">{{ data.IsPaid }}</div>
               <div class="col col-3" data-label="Operation">
-                <a href="/Bills/Edit/{{ data.ID }}">Edit</a> | <a class="deleteBill" href="/Bills/Delete/{{ data.ID }}">Delete</a>
+                {% for group in request.user.groups.all %}
+                  {% if group.name == 'Accountant' %}
+                    <a href="/Bills/Edit/{{ data.ID }}">Edit</a> | <a class="deleteBill" href="/Bills/Delete/{{ data.ID }}">Delete</a>
+                  {% else %}
+                    {% if data.IsPaid == 0 %}
+                      <a class="payIt" href="/Bills/Payment/{{ data.ID }}/">Pay It!</a>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
               </div>
             </li>
           {% endfor %}
@@ -34,23 +42,49 @@
       </ul>
     </div>
   </section>
-
-  <script>
-    $('.deleteBill').click(function (event) {
-      //linke click eventi kazandırma
-      event.preventDefault()
-      if (confirm('Do you sure delete this bill')) {
-        $.ajax({
-          url: this.href,
-          data: {
-            csrfmiddlewaretoken: '{{ csrf_token }}'
-          },
-          type: 'POST',
-          success: function (result) {
-            location.reload()
+  {% for group in request.user.groups.all %}
+    {% if group.name == 'Accountant' %}
+      <script>
+        $('.deleteBill').click(function (event) {
+          //linke click eventi kazandırma
+          event.preventDefault()
+          if (confirm('Do you sure delete this bill')) {
+            $.ajax({
+              url: this.href,
+              data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+              },
+              type: 'POST',
+              success: function (result) {
+                location.reload()
+              }
+            })
           }
         })
-      }
-    })
-  </script>
+      </script>
+    {% endif %}
+  {% endfor %}
+
+  {% for group in request.user.groups.all %}
+    {% if group.name == 'Patient' %}
+      <script>
+        $('.payIt').click(function (event) {
+          //linke click eventi kazandırma
+          event.preventDefault()
+          if (confirm('Do you sure pay this bill')) {
+            $.ajax({
+              url: this.href,
+              data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+              },
+              type: 'POST',
+              success: function (result) {
+                location.reload()
+              }
+            })
+          }
+        })
+      </script>
+    {% endif %}
+  {% endfor %}
 {% endblock %}

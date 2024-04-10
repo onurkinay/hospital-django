@@ -7,6 +7,8 @@ from django.shortcuts import (get_object_or_404,
                               HttpResponseRedirect)
 from django.shortcuts import render
 
+from django.contrib.auth.models import User,Group
+
 from .models import Appointment
 from doctor.models import Doctor
 from patient.models import Patient
@@ -21,9 +23,16 @@ def is_member(user, listgroup):
 
 @login_required
 @user_passes_test(lambda u: is_member(u,["Admin","Patient","Doctor"]))
-def home(request):
+def home(request): 
     context ={} 
-    context["dataset"] = Appointment.objects.all() 
+    if is_member(request.user,["Patient"]):
+        patientID = Patient.objects.filter(User_id = request.user.id).values()[0]["ID"]
+        context["dataset"] = Appointment.objects.filter(PatientID_id=patientID) 
+    elif is_member(request.user,["Doctor"]):
+        doctorID = Doctor.objects.filter(User_id = request.user.id).values()[0]["ID"]
+        context["dataset"] = Appointment.objects.filter(DoctorID_id = doctorID) 
+    else:
+        context["dataset"] = Appointment.objects.all() 
     return render(request, "appointment/home.html", context)
 
 @login_required

@@ -10,15 +10,27 @@ from .models import Prescription
 from .forms import PrescriptionForm 
 from itertools import chain
 
+from doctor.models import Doctor
+from patient.models import Patient
+from appointment.models import Appointment
+from bill.models import Bill
+
 def is_member(user, listgroup):
     return user.groups.filter(name__in=listgroup).exists()
  
 @login_required
 @user_passes_test(lambda u: is_member(u,["Doctor","Patient"]))
 def home(request):
-    context ={}
-  
-    context["dataset"] = Prescription.objects.all() 
+    context ={}  
+    if is_member(request.user,["Patient"]):
+        patientID = Patient.objects.filter(User_id = request.user.id).values()[0]["ID"]
+        appIds = Appointment.objects.filter(PatientID_id = patientID).values("ID").distinct()
+        context["dataset"] = Prescription.objects.filter(Appointment_id__in=appIds)
+    else:
+        doctorId = Doctor.objects.filter(User_id = request.user.id).values()[0]["ID"]
+        appIds = Appointment.objects.filter(DoctorID_id = doctorId).values("ID").distinct()
+        context["dataset"] = Prescription.objects.filter(Appointment_id__in=appIds)
+   
     return render(request, "prescription/home.html", context)
 
 @login_required

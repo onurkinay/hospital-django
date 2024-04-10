@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.http import JsonResponse, HttpResponseBadRequest
+from django.http import JsonResponse, HttpResponseBadRequest,HttpResponse
 from django.shortcuts import (get_object_or_404,
                               render,
                               HttpResponseRedirect)
@@ -10,6 +10,9 @@ from django.shortcuts import render
 from .models import Bill
 from .forms import BillForm
 
+from appointment.models import Appointment
+from patient.models import Patient
+
 
 def is_member(user, listgroup):
     return user.groups.filter(name__in=listgroup).exists()
@@ -17,9 +20,15 @@ def is_member(user, listgroup):
 @login_required
 @user_passes_test(lambda u: is_member(u,["Admin","Patient"]))
 def home(request):
-    context ={}
-  
-    context["dataset"] = Bill.objects.all() 
+    context ={} 
+    if is_member(request.user,["Patient"]):
+        patientID = Patient.objects.filter(User_id = request.user.id).values()[0]["ID"]
+        appIds = Appointment.objects.filter(PatientID_id = patientID).values("ID").distinct()
+        context["dataset"] = Bill.objects.filter(Appointment_id__in=appIds) 
+    
+    else:
+        context["dataset"] = Bill.objects.all() 
+    
     return render(request, "bill/home.html", context)
 
 @login_required
@@ -71,4 +80,6 @@ def delete(request):
 @login_required
 @user_passes_test(lambda u: is_member(u,["Patient"]))
 def payment(request, id):
-    return False
+    if request.method =="POST":
+        Bill.objects.filter(ID=id).update(IsPaid=1)
+    return HttpResponse("success")
