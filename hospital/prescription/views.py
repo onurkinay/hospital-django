@@ -51,6 +51,7 @@ def create(request, id):
         form.save()
          
     context['form']= form
+    context["appointment"] = Appointment.objects.filter(ID=id)[0]
     return render(request, "prescription/create.html", context)
 
 @login_required

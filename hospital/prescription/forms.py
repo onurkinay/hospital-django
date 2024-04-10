@@ -8,10 +8,11 @@ class PrescriptionForm(forms.ModelForm):
         model = Prescription
   
         fields = [
+            
+            "Appointment", 
             "Medicinde",
             "Remark",
-            "Advice",
-            "Appointment"
+            "Advice"
         ] 
         
         widgets = { 
