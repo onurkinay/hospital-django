@@ -24,7 +24,7 @@
               <span>Surname:</span> <input required class="form-control text-box single-line" data-val="true" data-val-required="Surame is required" id="Surname" name="Surname" type="text" value="{{ user.last_name }}" />
             </li>
             <li>
-              <span>Date of Birth:</span> <input required class="form-control text-box single-line" id="dob" max="2024-04-04" name="DateOfBirth" type="date" value="{{ form.DateOfBirth.value|date:'Y-m-d' }}" />
+              <span>Date of Birth:</span> <input required class="form-control text-box single-line" id="dob" max="{% now 'Y-m-d' %}" name="DateOfBirth" type="date" value="{{ form.DateOfBirth.value|date:'Y-m-d' }}" />
             </li>
             <li>
               <span>Mobile Number:</span> <input required class="form-control text-box single-line" data-val="true" data-val-required="Phone alanı gereklidir." id="Phone" name="Phone" type="text" value="{{ form.Phone.value }}" />
