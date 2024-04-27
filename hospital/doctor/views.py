@@ -75,14 +75,17 @@ def create(request):
 
 @login_required
 @user_passes_test(lambda u: is_member(u,["Admin","Doctor"])) ##todo department ve salary değiştirilmesini kapatılması
-def edit(request,id=-1):  
-    if id == -1:
-          id = Doctor.objects.filter(User_id = request.user.id).values()[0]["ID"]
+def edit(request,id=-1): 
     context ={}
+    if id == -1:
+        id = Doctor.objects.filter(User_id = request.user.id).values()[0]["ID"]
+        context["loggedInDoctor"] = True
+   
     obj = get_object_or_404(Doctor, ID = id)
   
     form = DoctorForm(request.POST or None, instance = obj) 
-  
+    if context["loggedInDoctor"]:
+        form.fields['Department'].widget.attrs['disabled'] = True
     result = [{}]
     if request.method == "POST": 
         for item in str(request.body.decode('utf-8')).split("&"):

@@ -12,7 +12,6 @@ from .forms import AccForm
 import urllib
 from itertools import chain
 
-
 def is_member(user, listgroup): #check roles for users
     return user.groups.filter(name__in=listgroup).exists()
 
