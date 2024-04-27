@@ -17,20 +17,20 @@
         <div class="kisisel-bilgiler">
             <ul>
                 <li>
-                    <span>Name:</span>    <input class="form-control text-box single-line" data-val="true" data-val-required="Name is required" id="Name" name="Name" type="text" value="">
+                    <span>Name:</span>    <input required class="form-control text-box single-line" data-val="true" data-val-required="Name is required" id="Name" name="Name" type="text" value="">
                  </li>
                 <li>
-                    <span>Surname:</span>  <input class="form-control text-box single-line" data-val="true" data-val-required="Surname is required" id="Surname" name="Surname" type="text" value="">
+                    <span>Surname:</span>  <input required class="form-control text-box single-line" data-val="true" data-val-required="Surname is required" id="Surname" name="Surname" type="text" value="">
                  </li>
                 <li>
-                    <span>Date of Birth:</span>     <input class="form-control text-box single-line" data-val="true" data-val-date="The field Date of Birth must be a date." data-val-required="Date of Birth is required" id="DOB" max="{% now "Y-m-d"  %}" name="DateOfBirth" type="date" value="">
+                    <span>Date of Birth:</span>     <input required class="form-control text-box single-line" data-val="true" data-val-date="The field Date of Birth must be a date." data-val-required="Date of Birth is required" id="DOB" max="{% now "Y-m-d"  %}" name="DateOfBirth" type="date" value="">
                 </li>
                 <li>
-                    <span>Mobile Number:</span>     <input class="form-control text-box single-line" data-val="true" data-val-required="Phone number is required" id="Phone" name="Phone" type="text" value="">
+                    <span>Mobile Number:</span>     <input required class="form-control text-box single-line" data-val="true" data-val-required="Phone number is required" id="Phone" name="Phone" type="text" value="">
                  
                 </li>
                 <li>
-                    <span>E-mail Address:</span>   <input class="form-control text-box single-line" data-val="true" data-val-regex="Email alanı &#39;^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$&#39; normal ifadesi ile eşleşmelidir." data-val-regex-pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$" data-val-required="Email alanı gereklidir." id="Email" name="Email" type="text" value="">
+                    <span>E-mail Address:</span>   <input required class="form-control text-box single-line" data-val="true" data-val-regex="Email alanı &#39;^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$&#39; normal ifadesi ile eşleşmelidir." data-val-regex-pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$" data-val-required="Email alanı gereklidir." id="Email" name="Email" type="text" value="">
                      
                 </li>
                 <li>
@@ -44,28 +44,28 @@
 
             <ul>
                 <li>
-                    <span>Password:</span> <input type="password" name="password" value="">
+                    <span>Password:</span> <input required type="password" name="password" value="">
                     
                 </li>
-                <li><span>Password Confirm:</span> <input type="password" name="passwordconfirm" value=""></li>
+                <li><span>Password Confirm:</span> <input required type="password" name="passwordconfirm" value=""></li>
                 <li>
                     <span>Gender</span> {{form.Gender}}
                  </li>
 
                 <li>
-                    <span>Languages:</span>    <input class="form-control text-box single-line" id="Languages" name="Languages" type="text" value="">
+                    <span>Languages:</span>    <input required class="form-control text-box single-line" id="Languages" name="Languages" type="text" value="">
                   </li>
                 <li>
-                    <span>Specializations:</span>    <input class="form-control text-box single-line" id="Specializations" name="Specializations" type="text" value="">
+                    <span>Specializations:</span>    <input required class="form-control text-box single-line" id="Specializations" name="Specializations" type="text" value="">
                  </li>
                 <li>
-                    <span>Experience:</span>    <input class="form-control text-box single-line" id="Experience" name="Experience" type="text" value="">
+                    <span>Experience:</span>    <input required class="form-control text-box single-line" id="Experience" name="Experience" type="text" value="">
                   </li>
 
                 <li>
                     <span>Salary:</span>
 
-                    <input class="form-control text-box single-line" data-val="true" data-val-number="The field Salary must be a number." data-val-required="Salary is required" id="Salary" name="Salary" type="text" value="">
+                    <input required class="form-control text-box single-line" name="Salary" type="text" value="">
 
                  </li>
 

@@ -28,7 +28,7 @@ def home(request):
 @login_required
 @user_passes_test(lambda u: is_member(u,["Patient","Admin","Doctor"]))
 def details(request,id):  
-    queryset = Patient.objects.filter(ID=id).values()
+    queryset = Patient.objects.filter(ID=id).values()#todo: blood group id not name 
     patientUser = User.objects.filter(id=queryset[0]["User_id"]).values("first_name","last_name","email")
     return JsonResponse(list(chain(queryset,patientUser)),safe=False)
     
@@ -45,11 +45,12 @@ def edit(request,id=-1):
   
     result = [{}]
     if request.method == "POST":
-        for item in str(request.body)[2:-1].split("&"):
+       
+        for item in str(request.body).split("&"):
             key, val = item.split("=", 1)
             if key in result[-1]:
                 result.append({})
-            result[-1][key] = urllib.parse.unquote(val).replace("+"," ")
+            result[-1][key] = urllib.parse.unquote(val).replace("+"," ").replace("'","")
 
        
         UserId = result[0].pop("UserId")
@@ -60,22 +61,22 @@ def edit(request,id=-1):
         password_confirm =  result[0].pop("passwordconfirm")
 
         
-        if password == "" or password_confirm=="":
-            context["form"] = form 
-            context["user"] = User.objects.get(id = obj.User_id)
-            context["message"] = "Password is required"
-            return render(request, "patient/edit.html", context)
-        if password != password_confirm:
-            context["message"] = "Password is not confirmed"
-            context["form"] = form 
-            context["user"] = User.objects.get(id = obj.User_id)
-            return render(request, "patient/edit.html", context)
+        IsChangePassword = False
+        if password != "" or password_confirm!="": 
+            if password != password_confirm:
+                context["message"] = "Password is not confirmed"
+                context["form"] = form 
+                context["user"] = User.objects.get(id = obj.User_id)
+                return render(request, "patient/edit.html", context)
+            IsChangePassword = True
         
-        if User.objects.filter(username=username).exists():
-            context["message"] = "Email already taken"
-            context["form"] = form 
-            context["user"] = User.objects.get(id = obj.User_id)
-            return render(request, "patient/edit.html", context)
+        if username != User.objects.filter(id = obj.User_id).values()[0]["username"]:
+            if User.objects.filter(username=username).exists():
+                context["message"] = "Email already taken"
+                context["form"] = form 
+                context["user"] = User.objects.get(id = obj.User_id)
+                return render(request, "patient/edit.html", context)
+ 
  
         query_dict = QueryDict('', mutable=True)
         query_dict.update(result[0])
@@ -83,11 +84,8 @@ def edit(request,id=-1):
         form = PatientForm(query_dict or None, instance = obj) 
         if form.is_valid():
             user = User.objects.get(id=UserId) 
-            if password != "" and password_confirm != "":
-                if password == password_confirm:
-                    user.set_password(password)
-                else:
-                    return HttpResponseBadRequest("Şifreler farklı")
+            if IsChangePassword:
+                user.set_password(password)
             user.first_name = name
             user.last_name = surname
             user.username = username

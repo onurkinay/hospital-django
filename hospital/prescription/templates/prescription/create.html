@@ -18,7 +18,7 @@
                 {{ field.errors }}
                 {{ field.label_tag }}
 
-                {% if field.auto_id != 'id_Appointment' %}
+                {% if field.auto_id == 'id_Appointment' %}
                   <input type="hidden" value="{{ appointment.ID }}" name="Appointment" id="id_Appointment" />
                   <label>{{ appointment.AppointmentDate }} - {{ appointment.DoctorID.User.first_name }} {{ appointment.DoctorID.User.last_name }}</label>
                 {% else %}

@@ -50,8 +50,6 @@ def create(request):
         password =   result[0].pop("password")
         password_confirm =  result[0].pop("passwordconfirm")
  
-        #logger.error(result[0])
-
         query_dict = QueryDict('', mutable=True)
         query_dict.update(result[0])
 
@@ -86,14 +84,13 @@ def edit(request,id=-1):
     form = DoctorForm(request.POST or None, instance = obj) 
   
     result = [{}]
-    if request.method == "POST":
-        for item in str(request.body.decode('utf-8'))[2:-1].split("&"):
+    if request.method == "POST": 
+        for item in str(request.body.decode('utf-8')).split("&"):
             key, val = item.split("=", 1)
             if key in result[-1]:
                 result.append({})
             result[-1][key] = urllib.parse.unquote(val).replace("+"," ")
 
-       
         UserId = result[0].pop("UserId")
         username = result[0]["Email"]
         name = result[0].pop("Name")
@@ -101,22 +98,21 @@ def edit(request,id=-1):
         password =   result[0].pop("password")
         password_confirm =  result[0].pop("passwordconfirm")
 
-        if password == "" or password_confirm=="":
-            context["form"] = form 
-            context["user"] = User.objects.get(id = obj.User_id)
-            context["message"] = "Password is required"
-            return render(request, "doctor/edit.html", context)
-        if password != password_confirm:
-            context["message"] = "Password is not confirmed"
-            context["form"] = form 
-            context["user"] = User.objects.get(id = obj.User_id)
-            return render(request, "doctor/edit.html", context)
+        IsChangePassword = False
+        if password != "" or password_confirm!="": 
+            if password != password_confirm:
+                context["message"] = "Password is not confirmed"
+                context["form"] = form 
+                context["user"] = User.objects.get(id = obj.User_id)
+                return render(request, "doctor/edit.html", context)
+            IsChangePassword = True
         
-        if User.objects.filter(username=username).exists():
-            context["message"] = "Email already taken"
-            context["form"] = form 
-            context["user"] = User.objects.get(id = obj.User_id)
-            return render(request, "doctor/edit.html", context)
+        if username != User.objects.filter(id = obj.User_id).values()[0]["username"]:
+            if User.objects.filter(username=username).exists():
+                context["message"] = "Email already taken"
+                context["form"] = form 
+                context["user"] = User.objects.get(id = obj.User_id)
+                return render(request, "doctor/edit.html", context)
  
         query_dict = QueryDict('', mutable=True)
         query_dict.update(result[0])
@@ -124,11 +120,8 @@ def edit(request,id=-1):
         form = DoctorForm(query_dict or None, instance = obj) 
         if form.is_valid():
             user = User.objects.get(id=UserId) 
-            if password != "" and password_confirm != "":
-                if password == password_confirm:
+            if IsChangePassword:
                     user.set_password(password)
-                else:
-                    return HttpResponseBadRequest("Şifreler farklı")
             user.first_name = name
             user.last_name = surname
             user.username = username

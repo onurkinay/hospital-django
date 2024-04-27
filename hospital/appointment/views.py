@@ -48,15 +48,14 @@ def create(request):
     
     context ={} 
     form = AppointmentForm(request.POST or None)
-    
+    form.initial["PatientID"] = Patient.objects.filter(User_id=request.user.id).values()[0]["ID"]
     if form.is_valid():
-       
-        form.save()
-
-        b = Bill(IssuedDate=datetime.now(), Amount=100, IsPaid=False,Appointment=form.instance)
+        form.save() 
+        b = Bill(IssuedDate=form.instance.AppointmentDate, Amount=100, IsPaid=False,Appointment=form.instance)
         b.save() 
         return HttpResponseRedirect("/Appointments/") 
     context['form']= form
+    
     return render(request, "appointment/create.html", context)
     
 @login_required
@@ -71,9 +70,7 @@ def edit(request,id):
         form.save()
         return HttpResponseRedirect("/Appointments/")
     
-    
     context["form"] = form
- 
     return render(request, "appointment/edit.html", context)
 
 @user_passes_test(lambda u: is_member(u,["Admin","Patient","Doctor"]))
@@ -83,8 +80,6 @@ def delete(request,id):
     if request.method =="POST":
         # delete object
         obj.delete()
-        # after deleting redirect to 
-        # home page
         return HttpResponseRedirect("/Appointments/")
  
     return HttpResponseBadRequest('<h1>You are not authorized to view this page</h1>')

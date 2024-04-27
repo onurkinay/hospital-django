@@ -13,7 +13,7 @@
 
       <input data-val="true" data-val-number="The field Id must be a number." data-val-required="Id alanı gereklidir." id="Id" name="Id" type="hidden" value="1" />
       <input id="UserId" name="UserId" type="hidden" value="{{ user.id }}" />
-
+      <p>{{ message }}</p>
       <div class="container">
         <div class="kisisel-bilgiler">
           <ul>
@@ -43,10 +43,10 @@
         <div class="hesap-bilgileri">
           <ul>
             <li>
-              <span>Password:</span> <input type="password" name="password" value="" required />
+              <span>Password:</span> <input type="password" name="password" value="" />
             </li>
             <li>
-              <span>Password Confirm:</span> <input type="password" name="passwordconfirm" value="" required />
+              <span>Password Confirm:</span> <input type="password" name="passwordconfirm" value="" />
             </li>
             <li>
               <span>Gender</span>

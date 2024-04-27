@@ -7,12 +7,18 @@ from django.contrib.auth.models import User,Group
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.http import QueryDict 
 from patient.forms import PatientForm
-import logging
+
+
 import urllib 
 
 from patient.models import Patient
 from doctor.models import Doctor
-#accountant, admin
+from administrator.models import Administrator
+from accountant.models import Accountant
+
+from appointment.models import Appointment
+from bill.models import Bill
+from department.models import Department
 
 
 def is_member(user, listgroup):
@@ -120,7 +126,16 @@ def management(request):
         context["data"] = Patient.objects.get(User_id=request.user.id)
         return render(request, "management/patient.html", context)
     elif is_member(request.user, ["Admin"]): 
+        context["data"] = Administrator.objects.get(User_id=request.user.id)
+
+        context["patientCount"] = Patient.objects.all().count()
+        context["doctorCount"]= Doctor.objects.all().count()
+        context["appCount"]= Appointment.objects.all().count()
+        context["billCount"]= Bill.objects.all().count()
+        context["deptCount"]= Department.objects.all().count()
+        
         return render(request, "management/admin.html", context)
     elif is_member(request.user, ["Accountant"]): 
+        context["data"] = Accountant.objects.get(User_id=request.user.id)
         return render(request, "management/accountant.html", context)
    

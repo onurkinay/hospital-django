@@ -1,7 +1,6 @@
 from django import forms
 from .models import Appointment
- 
-#Giriş yapan hastanın IDsi varsayılan olarak seçilmeli ve değiştirilmesine izin verilmemeli
+from datetime import date
 
 class AppointmentForm(forms.ModelForm):
   
@@ -19,9 +18,9 @@ class AppointmentForm(forms.ModelForm):
             'Description': forms.Textarea(attrs={'class': 'form-control','style':'width: 100%'}),
             'AppointmentDate': forms.DateInput(
                 format=('%Y-%m-%d %H:%M:%S'),
-                attrs={'class': 'form-control', 
-                       'placeholder': 'Select a date',
-                       'type': 'datetime-local'  
+                attrs={'class': 'form-control',  
+                       'type': 'datetime-local',
+                       'min': date.today().strftime("%Y-%m-%d %H:%m")
                       }),
             'PatientID': forms.HiddenInput()
         }

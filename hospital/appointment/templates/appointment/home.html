@@ -7,6 +7,7 @@
 {% block content %}
   <section id="randevular">
     <div class="container">
+      {{ form.errors }}
       <h2 style="display:inline">Appointments</h2>
       {% for group in request.user.groups.all %}
         {% if group.name == 'Patient' %}

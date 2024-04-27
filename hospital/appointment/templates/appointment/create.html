@@ -14,11 +14,10 @@
         <div class="kisisel-bilgiler" style="width:initial">
           <ul>
             {% for field in form %}
-              {% if field.field.widget.is_hidden %}
-                <input type="hidden" name="PatientID" value="{{ request.user.id }}" id="id_PatientID" />
-              {% else %}
+              {% if field.name != 'PatientID' %}
                 <li>
                   {{ field.errors }}
+
                   {{ field.label_tag }}
 
                   {{ field }}
@@ -27,6 +26,8 @@
                     <p class="help" id="{{ field.auto_id }}_helptext">{{ field.help_text|safe }}</p>
                   {% endif %}
                 </li>
+              {% else %}
+                {{ field }}
               {% endif %}
             {% endfor %}
             <li>
