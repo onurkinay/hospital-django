@@ -18,7 +18,7 @@ def is_member(user, listgroup):
     return user.groups.filter(name__in=listgroup).exists()
 
 @login_required
-@user_passes_test(lambda u: is_member(u,["Admin","Patient"]))
+@user_passes_test(lambda u: is_member(u,["Admin","Patient","Accountant"]))
 def home(request):
     context ={} 
     if is_member(request.user,["Patient"]):

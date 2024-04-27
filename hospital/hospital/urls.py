@@ -10,4 +10,6 @@ urlpatterns = [
     path('Departments/',include('department.urls')),
     path('Bills/',include('bill.urls')),
     path('Appointments/',include('appointment.urls')),
+    path('Admins/',include('administrator.urls')),
+    path('Accountants/',include('accountant.urls')),
 ]

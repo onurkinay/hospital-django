@@ -15,7 +15,6 @@ from itertools import chain
 
 def is_member(user, listgroup):
     return user.groups.filter(name__in=listgroup).exists()
- 
 
 @login_required
 @user_passes_test(lambda u: is_member(u,["Admin","Accountant"]))

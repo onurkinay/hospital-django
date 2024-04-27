@@ -1,0 +1,112 @@
+{% extends 'management_base.html' %}
+
+{% load static %}
+{% block title %}
+  Accountants
+{% endblock %}
+{% block content %}
+  <section id="doktor-yonetimi">
+    <div class="container">
+      <h2 style="display:inline">Accountant Management</h2>
+      {% for group in request.user.groups.all %}
+        {% if group.name == 'Admin' %}
+          <div class="addButton">
+            <a class="addButtonInside" href="/Accountants/Create">Add Accountant</a>
+          </div>
+        {% endif %}
+      {% endfor %}
+      <div class="bosluk"></div>
+      {% if dataset.count == 0 %}
+        <p>No record</p>
+      {% else %}
+        <ul class="responsive-table">
+          <li class="table-header">
+            <div class="col col-1">User ID</div>
+            <div class="col col-2">Email</div>
+            <div class="col col-4">Actions</div>
+          </li>
+          {% for data in dataset %}
+            <li class="table-row">
+              <div class="col col-1" data-label="User ID">{{ data.User.first_name }} {{ data.User.last_name }}</div>
+              <div class="col col-2" data-label="accountant Name">{{ data.User.email }}</div>
+              <div class="col col-4" data-label="Operation">
+                <a href="/Accountants/Edit/{{ data.ID }}">Edit</a> |
+                <a class="getDetails" href="/Accountants/Details/{{ data.ID }}/">Details</a>
+                |
+                <a class="delete" href="/Accountants/Delete/{{ data.ID }}/">Delete</a>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+  </section>
+
+  <div id="ex1" class="modal" style="max-width:initial">
+    <section id="ozel-sayfa" style="padding:0;margin-bottom:0">
+      <div class="container" style="max-width:initial">
+        <div class="kisisel-bilgiler">
+          <h3>Personal Information</h3>
+          <ul>
+            <li class="accountantUserId">
+              <span>User Id:</span>
+            </li>
+            <li class="accountantDoB">
+              <span>Date of Birth:</span>
+            </li>
+            <li class="accountantNumber">
+              <span>Phone Number:</span>
+            </li>
+          </ul>
+        </div>
+        <div class="hesap-bilgileri">
+          <h3>-</h3>
+          <ul>
+            <li class="accountantGender">
+              <span>Experience:</span>
+            </li>
+            <li class="accountantEmail">
+              <span>E-Mail Address:</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    $('.delete').click(function (event) {
+      //linke click eventi kazandırma
+      event.preventDefault()
+      if (confirm('Do you sure delete this accountant')) {
+        $.ajax({
+          url: this.href,
+          data: {
+            csrfmiddlewaretoken: '{{ csrf_token }}'
+          },
+          type: 'POST',
+          success: function (result) {
+            location.reload()
+          }
+        })
+      }
+    })
+    //hasta tarafı
+    $('.getDetails').click(function (event) {
+      //linke click eventi kazandırma
+      event.preventDefault()
+      this.blur()
+      $.get(this.href, function (json) {
+        const accountant = json
+        $('li.accountantUserId').html('<span>Name Surname:</span> ' + accountant[1].first_name + ' ' + accountant[1].last_name)
+        $('li.accountantDoB').html('<span>Date of Birth:</span> ' + new Date(accountant[0].DateOfBirth).toLocaleDateString())
+        $('li.accountantNumber').html('<span>Phone Number:</span> ' + accountant[0].Phone)
+        $('li.accountantEmail').html('<span>Email:</span> ' + accountant[1].email)
+        $('li.accountantGender').html('<span>Gender:</span> ' + accountant[0].Gender)
+        $('#ex1').modal()
+      })
+    })
+    
+    //hasta tarafı
+  </script>
+{% endblock %}
