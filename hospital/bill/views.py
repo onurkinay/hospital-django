@@ -6,7 +6,7 @@ from django.shortcuts import (get_object_or_404,
  
 
 from django.shortcuts import render
-
+from django.contrib.auth.models import User,Group
 from .models import Bill
 from .forms import BillForm
 
@@ -33,7 +33,7 @@ def home(request):
 
 @login_required
 @user_passes_test(lambda u: is_member(u,["Admin","Patient","Accountant"]))
-def details(request): #param id
+def details(request,id):  
     queryset = Bill.objects.filter(ID=id).values()
     return JsonResponse({"Bill": list(queryset)})
 
@@ -63,7 +63,7 @@ def edit(request,id):
         return HttpResponseRedirect("/Bills/")
   
     context["form"] = form
- 
+    context["patientName"] = " ".join(User.objects.filter(id = Patient.objects.filter(ID = obj.ID).values("User_id")[0]["User_id"]).values("first_name","last_name")[0].values())
     return render(request, "bill/edit.html", context)
 
 @login_required

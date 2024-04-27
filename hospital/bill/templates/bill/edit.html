@@ -13,6 +13,9 @@
       <div class="container" style="display:block">
         <div class="kisisel-bilgiler" style="width:initial">
           <ul>
+            <li>
+              <label for="id_IssuedDate">Patient of Appointment: {{ patientName }}</label>
+            </li>
             {% for field in form %}
               {% if field.name != 'PatientID' %}
                 <li>

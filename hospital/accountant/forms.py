@@ -3,7 +3,7 @@ from .models import Accountant
  
  
 # creating a form
-class AdminForm(forms.ModelForm):
+class AccForm(forms.ModelForm):
  
     # create meta class
     class Meta:

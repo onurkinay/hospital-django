@@ -8,39 +8,39 @@ from django.contrib.auth.models import User,Group
 from django.http import QueryDict
 
 from accountant.models import Accountant
-from .forms import AdminForm
+from .forms import AccForm
 import urllib
 from itertools import chain
 
 
-def is_member(user, listgroup):
+def is_member(user, listgroup): #check roles for users
     return user.groups.filter(name__in=listgroup).exists()
 
 def home(request):
     context ={} 
-    context["dataset"] = Accountant.objects.filter(IsVisible=True) 
+    context["dataset"] = Accountant.objects.filter(IsVisible=True) #get accountant which is visible
     return render(request, "accountant/home.html", context)
 
 @login_required
-@user_passes_test(lambda u: is_member(u,["Admin",])) #adece giriş yapan doktor kend bilgileri erişebilir
+@user_passes_test(lambda u: is_member(u,["Admin",])) #just admin can access
 def details(request,id): 
     queryset = Accountant.objects.filter(ID=id).values()
     adminUser = User.objects.filter(id=queryset[0]["User_id"]).values("first_name","last_name","email")
-    return JsonResponse(list(chain(queryset,adminUser)),safe=False)
+    return JsonResponse(list(chain(queryset,adminUser)),safe=False)#merge two info accountant and user
  
 @login_required
 @user_passes_test(lambda u: is_member(u,["Admin","Accountant"]))
 def edit(request,id=-1):  
-    if id == -1:
+    if id == -1:#logged in user info
           id = Accountant.objects.filter(User_id = request.user.id).values()[0]["ID"]
     context ={}
     obj = get_object_or_404(Accountant, ID = id)
   
-    form = AdminForm(request.POST or None, instance = obj) 
+    form = AccForm(request.POST or None, instance = obj) 
   
     result = [{}]
     if request.method == "POST":
-        for item in str(request.body.decode('utf-8')).split("&"):
+        for item in str(request.body.decode('utf-8')).split("&"): #divide into user and accountant table info
             key, val = item.split("=", 1)
             if key in result[-1]:
                 result.append({})
@@ -53,8 +53,8 @@ def edit(request,id=-1):
         password =   result[0].pop("password")
         password_confirm =  result[0].pop("passwordconfirm")
         
-        IsChangePassword = False
-        if password != "" or password_confirm!="": 
+        IsChangePassword = False  
+        if password != "" or password_confirm!="": #check password is not empty
             if password != password_confirm:
                 context["message"] = "Password is not confirmed"
                 context["form"] = form 
@@ -72,7 +72,7 @@ def edit(request,id=-1):
         query_dict = QueryDict('', mutable=True)
         query_dict.update(result[0])
 
-        form = AdminForm(query_dict or None, instance = obj) 
+        form = AccForm(query_dict or None, instance = obj) 
         if form.is_valid():
             user = User.objects.get(id=UserId) 
             if IsChangePassword:
@@ -123,7 +123,7 @@ def create(request):
         query_dict = QueryDict('', mutable=True)
         query_dict.update(result[0])
 
-        form = AdminForm(query_dict or None)
+        form = AccForm(query_dict or None)
 
         if User.objects.filter(username=username).exists():
             context["message"] = "Email already taken"
@@ -147,7 +147,7 @@ def create(request):
         else:
             return HttpResponseBadRequest(form.errors)
          
-    context['form']= AdminForm(None)
+    context['form']= AccForm(None)
     return render(request, "accountant/create.html", context)
 
 @login_required
