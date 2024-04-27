@@ -13,6 +13,7 @@ from .models import Appointment
 from doctor.models import Doctor
 from patient.models import Patient
 from bill.models import Bill
+from department.models import Department
 
 from .forms import AppointmentForm
 from itertools import chain
@@ -49,9 +50,11 @@ def create(request):
     context ={} 
     form = AppointmentForm(request.POST or None)
     form.initial["PatientID"] = Patient.objects.filter(User_id=request.user.id).values()[0]["ID"]
-    if form.is_valid():
+    if form.is_valid(): 
+        deptId = Doctor.objects.filter(ID = form.instance.DoctorID.ID).values()[0]["Department_id"]
+        amount = Department.objects.filter( ID = deptId ).values()[0]["PriceUnit"]
         form.save() 
-        b = Bill(IssuedDate=form.instance.AppointmentDate, Amount=100, IsPaid=False,Appointment=form.instance)
+        b = Bill(IssuedDate=form.instance.AppointmentDate, Amount=int(amount), IsPaid=False,Appointment=form.instance)
         b.save() 
         return HttpResponseRedirect("/Appointments/") 
     context['form']= form
