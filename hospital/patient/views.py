@@ -6,9 +6,8 @@ from django.shortcuts import (get_object_or_404,
 
 from django.contrib.auth.models import User,Group
 from django.http import QueryDict
-from .models import Patient
-from .forms import PatientForm
-import logging
+from .models import Patient, BLOOD_GROUPS
+from .forms import PatientForm 
 import urllib
 
 from itertools import chain
@@ -28,9 +27,12 @@ def home(request):
 @login_required
 @user_passes_test(lambda u: is_member(u,["Patient","Admin","Doctor"]))
 def details(request,id):  
-    queryset = Patient.objects.filter(ID=id).values()#todo: blood group id not name 
+    queryset = Patient.objects.filter(ID=id).values()
+    
     patientUser = User.objects.filter(id=queryset[0]["User_id"]).values("first_name","last_name","email")
-    return JsonResponse(list(chain(queryset,patientUser)),safe=False)
+    jsonResult = list(chain(queryset,patientUser))
+    jsonResult[0]["Blood_Group"] = BLOOD_GROUPS[ int( jsonResult[0]["Blood_Group"] )-1 ][1]
+    return JsonResponse(jsonResult,safe=False)
     
  
 @login_required
