@@ -105,7 +105,7 @@
         $('li.adminDoB').html('<span>Date of Birth:</span> ' + new Date(admin[0].DateOfBirth).toLocaleDateString())
         $('li.adminNumber').html('<span>Phone Number:</span> ' + admin[0].Phone)
         $('li.adminEmail').html('<span>Email:</span> ' + admin[1].email)
-        $('li.adminGender').html('<span>Gender:</span> ' + admin[0].Gender)
+        $('li.adminGender').html('<span>Gender:</span> ' + (admin[0].Gender ? 'Male' : 'Female'))
         $('#ex1').modal()
       })
     })
