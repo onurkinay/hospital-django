@@ -42,8 +42,8 @@
               <div class="col col-4" data-label="Operation">
                 {% for group in request.user.groups.all %}
                   {% if group.name == 'Accountant' %}
-                    <a class="changeSalary" href="/Doctors/ChangeSalary/{{ data.ID }}/">Change Salary</a>
-                    <a class="getDetails" href="/Doctors/Details/{{ data.ID }}/">| Details</a>
+                    <a class="changeSalary" href="/Doctors/ChangeSalary/{{ data.ID }}/">Change Salary</a> |
+                    <a class="getDetails" href="/Doctors/Details/{{ data.ID }}/">Details</a>
                   {% else %}
                     <a href="/Doctors/Edit/{{ data.ID }}">Edit</a> |
                     <a class="getDetails" href="/Doctors/Details/{{ data.ID }}/">Details</a>

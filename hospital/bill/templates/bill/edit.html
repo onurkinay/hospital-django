@@ -2,21 +2,40 @@
 
 {% load static %}
 {% block title %}
-  Appointment
+  Edit Bill
 {% endblock %}
 {% block content %}
-  <section id="randevu-al-container">
-    <h2 class="container-header">Edit Bill</h2>
-    <div class="randevu-al">
-      <form method="post">
-        {% csrf_token %}
+  <form method="post">
+    {% csrf_token %}
+    <section id="ozel-sayfa">
+      <h2 style="margin-left: 13%;">Edit Bill</h2>
+      {{ form.non_field_errors }}
+      <div class="container" style="display:block">
+        <div class="kisisel-bilgiler" style="width:initial">
+          <ul>
+            {% for field in form %}
+              {% if field.name != 'PatientID' %}
+                <li>
+                  {{ field.errors }}
 
-        <!-- Using the formset -->
-        {{ form.as_p }}
-        <div class="form-group">
-          <input id="btn" type="submit" value="Edit" />
+                  {{ field.label_tag }}
+
+                  {{ field }}
+
+                  {% if field.help_text %}
+                    <p class="help" id="{{ field.auto_id }}_helptext">{{ field.help_text|safe }}</p>
+                  {% endif %}
+                </li>
+              {% else %}
+                {{ field }}
+              {% endif %}
+            {% endfor %}
+            <li>
+              <button type="submit">Send</button>
+            </li>
+          </ul>
         </div>
-      </form>
-    </div>
-  </section>
+      </div>
+    </section>
+  </form>
 {% endblock %}

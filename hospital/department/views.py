@@ -20,7 +20,7 @@ def home(request):
     return render(request, "department/home.html", context)
 
 @login_required
-@user_passes_test(lambda u: is_member(u,["Admin"]))
+@user_passes_test(lambda u: is_member(u,["Admin","Accountant"]))
 def details(request,id): 
     queryset = Department.objects.filter(ID=id).values()
     return JsonResponse(list(queryset),safe=False)
@@ -72,7 +72,7 @@ def delete(request,id):#silinen departmanlara bağlı doktorları ilk departmanl
 
 
 @login_required
-@user_passes_test(lambda u: is_member(u,["Admin","Patient","Doctor"]))
+@user_passes_test(lambda u: is_member(u,["Admin","Patient","Doctor","Accountant"]))
 def getDeptName(request,id):
     obj = get_object_or_404(Department, ID = id)
     return HttpResponse(obj.Name)

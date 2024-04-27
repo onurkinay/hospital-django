@@ -60,7 +60,7 @@ def edit(request,id):
   
     if form.is_valid():
         form.save()
-        return HttpResponseRedirect("/"+id)
+        return HttpResponseRedirect("/Bills/")
   
     context["form"] = form
  

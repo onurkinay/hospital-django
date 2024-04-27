@@ -24,7 +24,7 @@ def home(request):
     return render(request, "doctor/home.html", context)
 
 @login_required
-@user_passes_test(lambda u: is_member(u,["Admin","Doctor","Patient"])) #sadece giriş yapan doktor kend bilgileri erişebilir
+@user_passes_test(lambda u: is_member(u,["Admin","Doctor","Patient","Accountant"])) #sadece giriş yapan doktor kend bilgileri erişebilir
 def details(request,id): 
     queryset = Doctor.objects.filter(ID=id).values()
     doctorUser = User.objects.filter(id=queryset[0]["User_id"]).values("first_name","last_name","email")
@@ -74,7 +74,7 @@ def create(request):
     return render(request, "doctor/create.html", context)
 
 @login_required
-@user_passes_test(lambda u: is_member(u,["Admin","Doctor"]))
+@user_passes_test(lambda u: is_member(u,["Admin","Doctor"])) ##todo department ve salary değiştirilmesini kapatılması
 def edit(request,id=-1):  
     if id == -1:
           id = Doctor.objects.filter(User_id = request.user.id).values()[0]["ID"]

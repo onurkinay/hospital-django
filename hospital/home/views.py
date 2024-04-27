@@ -136,6 +136,9 @@ def management(request):
         
         return render(request, "management/admin.html", context)
     elif is_member(request.user, ["Accountant"]): 
-        context["data"] = Accountant.objects.get(User_id=request.user.id)
+        context["data"] = Accountant.objects.get(User_id=request.user.id) 
+        context["doctorCount"]= Doctor.objects.all().count()
+        context["appCount"]= Appointment.objects.all().count()
+        context["billCount"]= Bill.objects.all().count() 
         return render(request, "management/accountant.html", context)
    
