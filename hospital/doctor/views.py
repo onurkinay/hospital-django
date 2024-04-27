@@ -76,7 +76,7 @@ def create(request):
 @login_required
 @user_passes_test(lambda u: is_member(u,["Admin","Doctor"])) ##todo department ve salary değiştirilmesini kapatılması
 def edit(request,id=-1): 
-    context ={}
+    context ={'loggedInDoctor':False}
     if id == -1:
         id = Doctor.objects.filter(User_id = request.user.id).values()[0]["ID"]
         context["loggedInDoctor"] = True
