@@ -8,7 +8,6 @@ GENDER_CHOICES = (
         ('F', 'Female'),
     )
 
-
 class Accountant(models.Model):
     ID = models.BigAutoField(primary_key=True)
     User = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,blank=True, null=True)

@@ -58,7 +58,7 @@ def logout(request):
         auth_logout(request)
         return HttpResponseRedirect("/")
 
-def register(request):
+def register(request):#register patient page
     context ={}
   
     result = [{}]

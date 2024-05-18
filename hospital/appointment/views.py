@@ -40,7 +40,6 @@ def home(request):
 @user_passes_test(lambda u: is_member(u,["Admin","Patient","Doctor"]))
 def details(request,id): 
     queryset = Appointment.objects.filter(ID=id).values()  
-
     return JsonResponse(list(chain(queryset)),safe=False)
 
 @login_required

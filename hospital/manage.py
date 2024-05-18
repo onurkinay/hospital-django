@@ -20,3 +20,10 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+###
+
+### sistemi anlatan afiş tarzı bişi
+### ortak kodları olduğu için birini anlatırız geri kalanları benzer diye geçeriz
+### 

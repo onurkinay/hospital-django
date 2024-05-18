@@ -12,9 +12,14 @@ from .forms import AccForm
 import urllib
 from itertools import chain
 
+
+
 def is_member(user, listgroup): #check roles for users
     return user.groups.filter(name__in=listgroup).exists()
 
+
+@login_required # not allowed anon
+@user_passes_test(lambda u: is_member(u,["Admin",])) #just admin can access
 def home(request):
     context ={} 
     context["dataset"] = Accountant.objects.filter(IsVisible=True) #get accountant which is visible
@@ -33,7 +38,7 @@ def edit(request,id=-1):
     if id == -1:#logged in user info
           id = Accountant.objects.filter(User_id = request.user.id).values()[0]["ID"]
     context ={}
-    obj = get_object_or_404(Accountant, ID = id)
+    obj = get_object_or_404(Accountant, ID = id)#get accountant row or throw 404
   
     form = AccForm(request.POST or None, instance = obj) 
   

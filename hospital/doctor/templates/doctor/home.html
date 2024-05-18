@@ -11,6 +11,7 @@
       {% for group in request.user.groups.all %}
         {% if group.name == 'Admin' %}
           <div class="addButton">
+            <!-- anlat -->
             <a class="addButtonInside" href="/Doctors/Create">Add Doctor</a>
           </div>
         {% endif %}

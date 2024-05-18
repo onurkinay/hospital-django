@@ -12,14 +12,10 @@ from .forms import AdminForm
 import urllib
 from itertools import chain
 
-
-
-
 def is_member(user, listgroup):
     return user.groups.filter(name__in=listgroup).exists()
 
-def home(request):
-   
+def home(request):#list admin list
     context ={} 
     context["dataset"] = Administrator.objects.filter(IsVisible=True) 
     return render(request, "administrator/home.html", context)
